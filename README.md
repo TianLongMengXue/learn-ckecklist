@@ -4,6 +4,8 @@
 
 本仓库为个人的学习仓库，主要包含学习过程中使用的视频示例、书本上的例题和课后习题、参照官网上的 **API** 手册编写的测试用例等。
 
+本仓库使用 **MIT LICENSE** ，需要的可以自行下载使用。 
+
 ## 仓库分支说明
 
 本仓库包含多个使用 git 命令 `git checkout orphan [分支名称]` 创建的孤立分支（该分支下提交的内容与其他分支提交的内容无关，不继承任何其他的提交）。
@@ -25,5 +27,18 @@
 
 # git 分支,包含 git 安装、一些常用命令学记笔记
 - git
+```
+
+## 如何下载本仓库
+
+```shell
+# 克隆仓库
+git clone https://github.com/TianLongMengXue/learn-ckecklist.git
+
+# 进入仓库目录,当前目录下显示的为 main 分支的内容
+cd learn-ckecklist
+
+# 切换仓库分支,如 c 分支,切换分支之后,仓库目录下显示的就是 c 分支的内容
+git checkout c
 ```
 

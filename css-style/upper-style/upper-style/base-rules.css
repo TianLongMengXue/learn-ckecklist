@@ -1,0 +1,7 @@
+@import "font-family.css";
+:root{
+	--background-images: var(--images);
+	--base-font-size: 13.5pt;
+	--font-family-text: 'Poppins', 'Source Han Sans CN', 'PingFang', 'Microsoft YaHei', sans-serif;
+	--font-family-code: 'JetBrains Mono', 'Menlo', 'Consolas', 'Source Han Sans HC', 'PingFang', 'Times New Roman', 'monospace', 'Microsoft YaHei';
+}

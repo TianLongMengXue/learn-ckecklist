@@ -1,0 +1,788 @@
+@import url('upper-style/base-rules.css');
+
+/* 全局属性 */
+html,
+body {
+	min-width: 900pt;
+	min-height: 567pt;
+}
+
+html{
+	position: relative;
+}
+
+body{
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: var(--background-images);
+	background-repeat: no-repeat;
+	background-size: cover;
+	z-index: 0;
+	
+}
+
+content{
+	background: transparent;
+}
+
+html,body,#write{
+	font-family: var(--font-family-text);
+	font-size: var(--base-font-size);
+}
+
+#write {
+	max-width: 1080px;
+	/* font-size: 18px; */
+	color: black;
+	margin: 0 auto;
+	padding: 30px 30px 100px 30px;
+	line-height: 1.6;
+	word-spacing: 0px;
+	letter-spacing: 0px;
+	word-break: break-word;
+	word-wrap: break-word;
+	text-align: left;
+	position: relative;
+	z-index: 1;
+	background-color: rgba(255, 250, 250, .2);
+	border: 1px solid rgba(255, 250, 250, .8);
+	border-radius: 40px;
+	backdrop-filter: blur(2px);
+	/* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+}
+
+#typora-sidebar{
+	background: transparent;
+}
+
+/*段落*/
+#write p {
+	font-size: 1rem;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	margin: 0;
+	line-height: 1.6;
+	color: black;
+}
+
+
+/*标题*/
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+	margin-top: 30px;
+	margin-bottom: 15px;
+	padding: 0px;
+	font-weight: 900;
+	color: black;
+}
+
+#write h1 {
+	font-size: 1.8rem;
+	border-bottom: 2px solid rgb(239, 112, 96);
+	text-align: center;
+}
+
+#write h1::before {
+	content: "✔";
+	font-weight: 900;
+	color: #ffb11b;
+	margin-right: 4px
+}
+
+#write h2 {
+	font-size: 1.5rem;
+	border-bottom: 2px solid rgb(239, 112, 96);
+}
+
+#write h2 span,
+#write h1 span {
+	display: inline-block;
+	font-weight: 900;
+	background: rgb(239, 112, 96);
+	color: #ffffff;
+	padding: 3px 10px 1px;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+	margin-right: 3px;
+}
+
+#write h2:after,
+#write h1:after {
+	display: inline-block;
+	content: "";
+	vertical-align: bottom;
+	border-bottom: 36px solid #efebe9;
+	border-right: 20px solid transparent;
+}
+
+#write h3 {
+	font-size: 1.3rem;
+}
+
+#write h4 {
+	font-size: 1.1rem;
+}
+
+#write h5 {
+	font-size: 1em;
+}
+
+#write h6 {
+	font-size: 1em;
+}
+
+/*列表*/
+#write ul,
+#write ol {
+	margin-top: 8px;
+	margin-bottom: 8px;
+	padding-left: 25px;
+	color: black;
+}
+
+#write ul {
+	list-style-type: disc;
+}
+
+#write ul ul {
+	list-style-type: square;
+}
+
+#write ol {
+	list-style-type: decimal;
+}
+
+#write li section {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	line-height: 26px;
+	text-align: left;
+	color: rgb(1, 1, 1);
+	/* 只要是纯黑色微信编辑器就会把color这个属性吞掉。。。*/
+	font-weight: 500;
+}
+
+/*引用*/
+#write blockquote {
+	display: block;
+	font-size: 1rem;
+	overflow: auto;
+	overflow-scrolling: touch;
+	border-left: 3px solid rgb(239, 112, 96);
+	color: #6a737d;
+	padding: 0px 10px 0px 20px;
+	/*margin-bottom: 20px;
+    margin-top: 20px;*/
+	background: #fff9f9;
+}
+
+#write blockquote p {
+	margin: 0px;
+	color: black;
+	line-height: 26px;
+}
+
+/*链接*/
+#write a {
+	text-decoration: none;
+	word-wrap: break-word;
+	font-weight: bold;
+	border-bottom: 1px solid #1e6bb8;
+	color: rgb(239, 112, 96);
+	border-bottom: 1px solid rgb(239, 112, 96);
+}
+
+/*行内代码*/
+#write p code,
+#write li code {
+	font-size: 1rem;
+	word-wrap: break-word;
+	padding: 3px 6px;
+	border-radius: 4px;
+	margin: 0 2px;
+	color: rgb(239, 112, 96);
+	background-color: rgba(27, 31, 35, .05);
+	font-family: var(--font-family-code);
+	word-break: break-all;
+}
+
+/*图片*/
+#write img {
+	display: block;
+}
+
+#write span img {
+}
+
+#write img,
+#write span img {
+	max-width: 100%;
+	max-height: 80vh;
+	margin: 0 auto;
+	border: none;
+	border-radius: 0.5em;
+	box-shadow: 0 0 2px #0000;
+	transition: all 0.3s !important;
+}
+
+#write img:hover,
+#write span img:hover {
+	box-shadow: 0 0 2px #0004;
+}
+
+/*表格*/
+#write table {
+	display: table;
+	text-align: left;
+}
+
+#write tbody {
+	border: 0;
+}
+
+#write table tr {
+	border: 0;
+	border-top: 1px solid #ccc;
+	background-color: white;
+}
+
+#write table tr:nth-child(2n) {
+	background-color: #F8F8F8;
+}
+
+#write table tr th,
+#write table tr td {
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	padding: 5px 10px;
+	text-align: left;
+}
+
+#write table tr th {
+	font-weight: bold;
+	background-color: #f0f0f0;
+}
+
+#write ul,
+.markdown-section ul,
+#write ol,
+.markdown-section ol {
+	margin: 0.5em 0;
+	padding-left: 3ch;
+}
+
+#write ul li,
+.markdown-section ul li,
+#write ol li,
+.markdown-section ol li {
+	margin: 0.5em 0;
+}
+
+#write ul ul,
+.markdown-section ul ul,
+#write ol ul,
+.markdown-section ol ul,
+#write ul ol,
+.markdown-section ul ol,
+#write ol ol,
+.markdown-section ol ol {
+	margin: 0.3em 0;
+}
+
+#write ul ul li,
+.markdown-section ul ul li,
+#write ol ul li,
+.markdown-section ol ul li,
+#write ul ol li,
+.markdown-section ul ol li,
+#write ol ol li,
+.markdown-section ol ol li {
+	margin: 0.3em 0;
+}
+
+#write li p,
+.markdown-section li p {
+	margin: 0;
+}
+
+#write ol li::marker,
+.markdown-section ol li::marker {
+	font: 0.9em var(--font-family-code);
+}
+
+#write .task-list-item,
+.markdown-section .task-list-item {
+	margin-left: 0 !important;
+	position: relative;
+}
+
+#write .task-list-item input[type="checkbox"],
+.markdown-section .task-list-item input[type="checkbox"] {
+	width: 1.5em !important;
+	margin: 0;
+	position: absolute;
+	left: -1.5em;
+	top: 0.5em;
+}
+
+#write table:not(.md-grid-board),
+.markdown-section table:not(.md-grid-board),
+#write .md-table,
+.markdown-section .md-table {
+	display: table;
+	width: auto;
+	border-radius: 0.5em;
+	overflow: hidden;
+	font: 0.9rem/1.25 var(--font-family-code);
+	border-collapse: separate;
+	border: 1px solid #8884;
+}
+
+#write table:not(.md-grid-board) th,
+.markdown-section table:not(.md-grid-board) th,
+#write .md-table th,
+.markdown-section .md-table th,
+#write table:not(.md-grid-board) td,
+.markdown-section table:not(.md-grid-board) td,
+#write .md-table td,
+.markdown-section .md-table td {
+	padding: 0.5em clamp(0.5em, 1vw, 2em);
+	vertical-align: top;
+	border: none;
+}
+
+#write table:not(.md-grid-board) th:not(:last-child),
+.markdown-section table:not(.md-grid-board) th:not(:last-child),
+#write .md-table th:not(:last-child),
+.markdown-section .md-table th:not(:last-child),
+#write table:not(.md-grid-board) td:not(:last-child),
+.markdown-section table:not(.md-grid-board) td:not(:last-child),
+#write .md-table td:not(:last-child),
+.markdown-section .md-table td:not(:last-child) {
+	border-right: 1px dashed #8888;
+}
+
+#write table:not(.md-grid-board) tr:last-child td,
+.markdown-section table:not(.md-grid-board) tr:last-child td,
+#write .md-table tr:last-child td,
+.markdown-section .md-table tr:last-child td {
+	border-bottom: none;
+}
+
+#write table:not(.md-grid-board) th,
+.markdown-section table:not(.md-grid-board) th,
+#write .md-table th,
+.markdown-section .md-table th,
+#write table:not(.md-grid-board) td,
+.markdown-section table:not(.md-grid-board) td,
+#write .md-table td,
+.markdown-section .md-table td {
+	border-bottom: 1px solid #8884;
+}
+
+#write table:not(.md-grid-board) th,
+.markdown-section table:not(.md-grid-board) th,
+#write .md-table th,
+.markdown-section .md-table th {
+	background: #8882;
+}
+
+#write table:not(.md-grid-board) tbody tr:nth-child(even),
+.markdown-section table:not(.md-grid-board) tbody tr:nth-child(even),
+#write .md-table tbody tr:nth-child(even),
+.markdown-section .md-table tbody tr:nth-child(even) {
+	background: rgba(136, 136, 136, 0);
+}
+
+#write table:not(.md-grid-board) tbody tr:nth-child(odd),
+.markdown-section table:not(.md-grid-board) tbody tr:nth-child(odd),
+#write .md-table tbody tr:nth-child(odd),
+.markdown-section .md-table tbody tr:nth-child(odd) {
+	background: none;
+}
+
+#write .table_light,
+.markdown-section .table_light {
+	border: 1px solid #8884;
+}
+
+#write .table_light th,
+.markdown-section .table_light th,
+#write .table_light td,
+.markdown-section .table_light td {
+	border-bottom: 1px solid #8884;
+}
+
+#write .table_light th,
+.markdown-section .table_light th {
+	background: #8882;
+}
+
+#write .table_light tbody tr:nth-child(even),
+.markdown-section .table_light tbody tr:nth-child(even) {
+	background: rgba(136, 136, 136, 0);
+}
+
+#write .table_light tbody tr:nth-child(odd),
+.markdown-section .table_light tbody tr:nth-child(odd) {
+	background: none;
+}
+
+#write .table_dark th,
+.markdown-section .table_dark th,
+#write .table_dark td,
+.markdown-section .table_dark td {
+	color: white;
+}
+
+#write .table_dark th,
+.markdown-section .table_dark th {
+	background: #333;
+	color: #F69;
+}
+
+#write .table_dark tbody tr:nth-child(even),
+.markdown-section .table_dark tbody tr:nth-child(even) {
+	background: #595959;
+}
+
+#write .table_dark tbody tr:nth-child(odd),
+.markdown-section .table_dark tbody tr:nth-child(odd) {
+	background: #666666;
+}
+
+table .md-br,
+table .md-br-content {
+	font-size: 0;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+#outline-content {
+	padding: 0 0.5em;
+	font: 400 0.8em var(--font-family-code);
+}
+
+#outline-content li ul {
+	padding-left: 2ch;
+}
+
+#outline-content li .outline-item {
+	padding: 0.5em 0.5em !important;
+	margin: 0;
+	border: none;
+	border-radius: 0.25em;
+}
+
+#outline-content li .outline-item .outline-expander {
+	padding-right: 1ch;
+}
+
+#outline-content li .outline-item .outline-label {
+	font: 1.25em var(--font-family-text);
+}
+
+#outline-content li .outline-item .outline-label:hover {
+	text-decoration: none;
+}
+
+#outline-content li .outline-item::before {
+	display: inline-block;
+	flex: none;
+	padding: 0.3em 0.25em;
+	position: absolute;
+	text-align: right;
+	opacity: 0;
+	transition: all 3s;
+}
+
+#outline-content li .outline-item::before:hover {
+	color: #FFF;
+	background: red;
+	border-radius: 0.25em;
+	z-index: 99;
+}
+
+#outline-content li .outline-item:hover::before,
+#outline-content li .outline-item .outline-active::before {
+	opacity: 0.75;
+	transition: all 0s;
+}
+
+#outline-content li .outline-item:hover {
+	background-color: inherit;
+}
+
+#outline-content li .outline-item .outline-active {
+	color: #24D;
+	font-weight: bold !important;
+}
+
+/* 行内代码 */
+#write span code,
+#write li code {
+	/* color: rgb(239, 112, 96); */
+	color: #06B;
+}
+
+/* 脚注上标 */
+#write .md-footnote {
+	font-weight: bold;
+	color: rgb(239, 112, 96);
+}
+
+#write .md-footnote>.md-text:before {
+	content: '['
+}
+
+#write .md-footnote>.md-text:after {
+	content: ']'
+}
+
+/* 脚注 */
+#write .md-def-name {
+	padding-right: 1.8ch;
+}
+
+#write .md-def-name:before {
+	content: '[';
+	color: #000;
+}
+
+#write .md-def-name:after {
+	color: #000;
+}
+
+/* 代码段 背景 */
+pre {
+	--select-text-bg-color: #ebe1f5;
+}
+
+/* border and bg 代码段 */
+.md-fences {
+	border: 1px solid #eee;
+	border-radius: 5px;
+	background: #fdfdfd !important;
+	font-size: 1rem;
+	font-family: Consolas;
+	font-weight: bold;
+}
+
+#write pre.md-fences {
+	display: block;
+	-webkit-overflow-scrolling: touch;
+	box-shadow: 0rem 0.2rem 0.4rem rgba(116, 95, 181, 0.1);
+}
+
+.cm-s-inner {
+	padding: 0.25rem;
+	border-radius: 0.25rem;
+}
+
+.cm-s-inner.CodeMirror,
+.cm-s-inner .CodeMirror-gutters {
+	color: #3a3432 !important;
+	border: none;
+}
+
+.cm-s-inner .CodeMirror-gutters {
+	color: #6d8a88;
+}
+
+.cm-s-inner .CodeMirror-linenumber {
+	padding: 0 0.1rem 0 0.3rem;
+	color: #b8b5b4;
+}
+
+.cm-s-inner .CodeMirror-line::selection,
+.cm-s-inner .CodeMirror-line::-moz-selection,
+.cm-s-inner .CodeMirror-line>span::selection,
+.cm-s-inner .CodeMirror-line>span::-moz-selection,
+.cm-s-inner .CodeMirror-line>span>span::selection,
+.cm-s-inner .CodeMirror-line>span>span::-moz-selection {
+	background: rgba(116, 95, 181, 0.05);
+}
+
+.md-fences.md-focus .cm-s-inner .CodeMirror-activeline-background {
+	background: rgba(116, 95, 181, 0.05);
+}
+
+.cm-s-inner .CodeMirror-matchingbracket {
+	text-decoration: underline;
+	color: #a34e8f !important;
+}
+
+#fences-auto-suggest .active {
+	background: #ddd;
+}
+
+.cm-s-inner span.cm-comment {
+	/*color: #9daab6;*/
+	color: #008000;
+}
+
+.cm-s-inner span.cm-builtin {
+	color: #0451a5;
+}
+
+/* language tip */
+#write .code-tooltip {
+	border: 1px solid #eee;
+}
+
+.auto-suggest-container {
+	border-color: #b4b4b4;
+}
+
+.auto-suggest-container .autoComplt-hint.active {
+	background: #b4b4b4;
+	color: inherit;
+}
+
+/* task list */
+#write .md-task-list-item>input {
+	-webkit-appearance: initial;
+	display: block;
+	position: absolute;
+	border: 1px solid #b4b4b4;
+	border-radius: 0.2rem;
+	margin-top: 0.3rem;
+	height: 1rem;
+	width: 1rem;
+	transition: background 0.3s;
+}
+
+#write .md-task-list-item>input:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+#write .md-task-list-item>input:hover {
+	background: #ddd;
+}
+
+#write .md-task-list-item>input[checked]::before {
+	content: "";
+	position: absolute;
+	top: 20%;
+	left: 50%;
+	height: 60%;
+	width: 2px;
+	transform: rotate(40deg);
+	background: #333;
+}
+
+#write .md-task-list-item>input[checked]::after {
+	content: "";
+	position: absolute;
+	top: 46%;
+	left: 25%;
+	height: 30%;
+	width: 2px;
+	transform: rotate(-40deg);
+	background: #333;
+}
+
+#write .md-task-list-item>p {
+	transition: color 0.3s, opacity 0.3s;
+}
+
+#write .md-task-list-item.task-list-done>p {
+	color: #b4b4b4;
+	text-decoration: line-through;
+}
+
+#write .md-task-list-item.task-list-done>p>.md-emoji {
+	opacity: 0.5;
+}
+
+#write .md-task-list-item.task-list-done>p>.md-link>a {
+	opacity: 0.6;
+}
+
+/* sidebar and outline */
+.pin-outline .outline-active {
+	color: #79589f;
+}
+
+#typora-sidebar,
+.typora-node #typora-sidebar {
+	box-shadow: 3px 0px 10px rgba(116, 95, 181, 0.1);
+}
+
+.file-list-item {
+	border-bottom: 1px solid;
+	border-color: rgba(116, 95, 181, 0.1);
+}
+
+.file-list-item-summary {
+	font-weight: normal;
+}
+
+.file-list-item.active {
+	color: #79589f;
+	background-color: rgba(116, 95, 181, 0.1);
+}
+
+.file-tree-node.active>.file-node-background {
+	background-color: rgba(116, 95, 181, 0.1);
+	font-weight: normal;
+}
+
+.file-tree-node.active>.file-node-content {
+	color: #79589f;
+	font-weight: normal;
+}
+
+.sidebar-tabs {
+	border-bottom: none;
+}
+
+.sidebar-tab.active {
+	font-weight: normal;
+}
+
+.info-panel-tab-border {
+	color: rgba(116, 95, 181, 0.7);
+}
+
+.sidebar-content-content {
+	font-size: 0.9rem;
+}
+
+/* 搜索 */
+.ty-file-search-match-text {
+	background-color: rgba(116, 95, 181, 0.3);
+}
+
+.md-search-hit {
+	background-color: rgba(116, 95, 181, 0.3);
+	contain: style;
+}
+
+element.style {
+	width: calc(100% - 18px);
+}
+
+#file-library-search-input:focus {
+	border-color: rgba(116, 95, 181, 0.3);
+}
+
+.code-tooltip .ty-input:focus,
+input:focus {
+	border-color: rgba(116, 95, 181, 0.3);
+}
+
+#write strong {
+	padding: 1px 10px;
+	border-radius: 4px;
+	background-color: rgba(27, 31, 35, .1);
+	font-family: var(--font-family-text);
+	font-weight: 900;
+}

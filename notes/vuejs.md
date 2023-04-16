@@ -2007,8 +2007,10 @@ http://localhost:8080/
   "version": "0.1.0", // 本项目的版本号
   "private": true, // 项目权限是否私有,true表示本项目是私有的不允许 npm 自动收集项目信息对外公布
   "scripts": {
-    "serve": "vue-cli-service serve", // 本地创建一个 web 服务器,运行项目,在 web 服务器运行期间,项目的所有修改,服务器会自动刷新浏览器页面,同步修改到浏览器
-    "build": "vue-cli-service build" // 将项目生成
+      // 通过命令行输入 npm run serve  本地创建一个 web 服务器,运行项目,在 web 服务器运行期间,项目的所有修改,服务器会自动刷新浏览器页面,同步修改到浏览器
+    "serve": "vue-cli-service serve",
+      // 通过命令行输入 npm run build 将整个项目打包生成发布版本
+    "build": "vue-cli-service build"
   },
   "dependencies": { // 项目的全局依赖
     "core-js": "^3.8.3",
@@ -2306,157 +2308,6 @@ createApp(App).mount('#app')
 <!-- template 内允许有多个根标签 -->
 </template>
 ```
-
-
-
-
-
-# 重构vue项目
-
-## 1、修改index.html
-
-将文件 **public/index.html** 中的标签 `<div id="app"></div>` 中的属性 `id` 的属性值修改为 `index`。
-
-```html
-<!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="index"></div>
-    <!-- built files will be auto injected -->
-  </body>
-</html>
-```
-
-## 2、修改文件main.js
-
-将 **main.js** 文件中的 `App` 和 `App.vue` 统一修改为 `Index` 和 `Index.vue` 。
-
-```js
-import { createApp } from 'vue'
-import Index from './Index.vue'
-
-createApp(Index).mount('#index')
-```
-
-通过以上的更改之后，整个项目就不是将 `App.vue` 这个根组件渲染到 `index.html` 中的属性为 `id="app"` 的标签内，而是将 `Index.vue` 这个根组件渲染到 `Index.html` 中的属性为 `id="index"` 的标签内。
-
-## 3、创建新的根组件Index.vue
-
-在 **src/** 目录下新建文件 `Index.vue`，并添加如下内容：
-
-```vue
-<template>
-  <h1>This is test tip.</h1>
-  <h1 v-cloak>{{title}}</h1>
-</template>
-
-<script>
-
-export default { // 组件 vue 实例对象,即 MVVM 中的 VM
-  name: "Index", // 组件 vue 实例的标识符
-  data: function () { // 组件 vue 实例的模型,即 MVVM 中的 M
-      title: "This is a movie lists."
-  },
-}
-</script>
-
-<style scoped>
-
-</style>
-```
-
-此时在当前工程目录下启动 CMD 窗口，输入 `cnpm run serve` 将 vue 项目运行，此时显示内容如下。
-
-![1679879285934](images/1679879285934.png)
-
-## 4、父组件向子组件传值
-
-在 **src/components/** 目录下新建文件 **Movie.vue**。
-
-```vue
-<template>
-  <h2 v-cloak>{{message}}</h2>
-  <h2 v-cloak>{{name}}</h2>
-  <h3 v-cloak>{{rating}}</h3>
-  <button @click="addFav">添加搜藏</button>
-</template>
-
-<script>
-export default {
-  name: "Movie",
-  props:[ // 子组件通过 props 属性,将本组件的一些属性对外暴露,父组件在调用子组件时,通过这些属性将属性值传递给子组件
-      "name",
-      "rating",
-      "message",
-  ],
-  data: function () {
-    return {
-    }
-  },
-  methods: {
-    addFav () {
-      alert("搜藏成功!");
-    }
-  }
-}
-</script>
-
-<style scoped>
-
-</style>
-```
-
-在 **src/** 目录下文件 `Index.vue` 中添加如下内容：
-
-```vue
-<!-- HTML 标签名称和 HTML 标签的属性名称都是不区分大小写字母的 -->
-<!-- 因此 HTML 默认统一使用使用小写字母,且字母与字母之间使用短横线连接 -->
-<!-- 如：<Movie /> 和 <movie /> 是一样的 -->
-<!-- 如：-->
-<template>
-  <h1>This is test tip.</h1>
-  <h1 v-cloak>{{title}}</h1>
-  <!-- 通过子组件使用 props 属性暴露出来的属性,通过属性="属性值"的方式将值传递给子组件 -->
-  <Movie v-for="movie in movieLists" :key="movie.id" :name="movie.name" :rating="movie.rating" message="tips"/>
-</template>
-
-<script>
-import Movie from "@/components/Movie"; // 导入子组件 Movie
-
-export default {
-  name: "Index",
-  components: { // 组件注册,创建可以进行任意次复用的 vue 组件
-    Movie, // 将子组件添加到本组件的 vue 实例对象中,之后子组件名称可以作为自定义标签使用
-  },
-  data: function () {
-    return {
-      title: "This is a movies lists.",
-      movieLists: [
-        {id: 1, name: "first", rating: 8.8},
-        {id: 2, name: "second", rating: 8.7},
-        {id: 3, name: "third", rating: 8.9}
-      ],
-    }
-  }
-}
-</script>
-
-<style scoped>
-
-</style>
-```
-
-![1679881779064](images/1679881779064.png)
 
 
 
@@ -2857,7 +2708,7 @@ this.$http.get('/user', { // 在向服务器发送请求时,会自动拼接配�
   }); 
 ```
 
-
+# 引入cookie与token
 
 
 
@@ -3861,21 +3712,98 @@ const UserDetails = () =>
 
 # 引入vuex
 
-## 1、vuex基本说明
+## 1、组件的数据以及组件之间的数据传递方式
 
-（1）组件的数据以及组件之间的数据传递方式有：
+（1）组件本身由内部的 **data** 提供数据；
 
-①组件本身由内部的 **data** 提供数据；
+（2）子组件由父组件使用 **props** 传递数据；
 
-②子组件由父组件使用 **props** 传递数据；
+（3）兄弟组件间通过 **Vuex** 等统一数据源提供数据共享。
 
-③兄弟组件间通过 **Vuex** 等统一数据源提供数据共享。
+在 **src/components/** 目录下新建文件 **Movie.vue**。
 
-（2）对于组件化开发，一个规模较大的应用往往需要跨越多个组件，在多层嵌套的父子组件之间进行数据传递是一件十分麻烦的事情，而且 **vuejs** 还没有为兄弟组件之间的数据共享提供之间的方法。
+```vue
+<template>
+  <h2 v-cloak>{{message}}</h2>
+  <h2 v-cloak>{{name}}</h2>
+  <h3 v-cloak>{{rating}}</h3>
+  <button @click="addFav">添加搜藏</button>
+</template>
 
-（3）**vuex** 是一个专为 **vuejs** 应用程序开发的状态管理库，**vuex** 为了 **vuejs** 提供了一个 **全局的状态管理器** ，采用集中式存储的方式将所有分散在 **vuejs** 应用程序中的所有 **vue** 组件中的共享数据交由状态管理器保存。
+<script>
+export default {
+  name: "Movie",
+  props:[ // 子组件通过 props 属性,将本组件的一些属性对外暴露,父组件在调用子组件时,通过这些属性将属性值传递给子组件
+      "name",
+      "rating",
+      "message",
+  ],
+  data: function () {
+    return {
+    }
+  },
+  methods: {
+    addFav () {
+      alert("搜藏成功!");
+    }
+  }
+}
+</script>
 
-（4）**vuex** 提供了基于 vuejs 2.x 版本的 [vuex 3.x](https://v3.vuex.vuejs.org/zh/) 版本和基于 vuejs 3.x 版本的 [vuex 4.x](https://vuex.vuejs.org/zh/guide/) 版本。
+<style scoped>
+
+</style>
+```
+
+在 **src/** 目录下文件 `Index.vue` 中添加如下内容：
+
+```vue
+<!-- HTML 标签名称和 HTML 标签的属性名称都是不区分大小写字母的 -->
+<!-- 因此 HTML 默认统一使用使用小写字母,且字母与字母之间使用短横线连接 -->
+<!-- 如：<Movie /> 和 <movie /> 是一样的 -->
+<!-- 如：-->
+<template>
+  <h1>This is test tip.</h1>
+  <h1 v-cloak>{{title}}</h1>
+  <!-- 通过子组件使用 props 属性暴露出来的属性,通过属性="属性值"的方式将值传递给子组件 -->
+  <Movie v-for="movie in movieLists" :key="movie.id" :name="movie.name" :rating="movie.rating" message="tips"/>
+</template>
+
+<script>
+import Movie from "@/components/Movie"; // 导入子组件 Movie
+
+export default {
+  name: "Index",
+  components: { // 组件注册,创建可以进行任意次复用的 vue 组件
+    Movie, // 将子组件添加到本组件的 vue 实例对象中,之后子组件名称可以作为自定义标签使用
+  },
+  data: function () { // 为当前组件 Index 提供数据
+    return {
+      title: "This is a movies lists.",
+      movieLists: [
+        {id: 1, name: "first", rating: 8.8},
+        {id: 2, name: "second", rating: 8.7},
+        {id: 3, name: "third", rating: 8.9}
+      ],
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
+```
+
+![1679881779064](images/1679881779064.png)
+
+## 2、vuex基本说明
+
+（1）对于组件化开发，一个规模较大的应用往往需要跨越多个组件，在多层嵌套的父子组件之间进行数据传递是一件十分麻烦的事情，而且 **vuejs** 还没有为兄弟组件之间的数据共享提供之间的方法。
+
+（2）**vuex** 是一个专为 **vuejs** 应用程序开发的状态管理库，**vuex** 为了 **vuejs** 提供了一个 **全局的状态管理器** ，采用集中式存储的方式将所有分散在 **vuejs** 应用程序中的所有 **vue** 组件中的共享数据交由状态管理器保存。
+
+（3）**vuex** 提供了基于 vuejs 2.x 版本的 [vuex 3.x](https://v3.vuex.vuejs.org/zh/) 版本和基于 vuejs 3.x 版本的 [vuex 4.x](https://vuex.vuejs.org/zh/guide/) 版本。
 
 ## 2、安装vuex
 
@@ -4871,4 +4799,169 @@ npm run dev
 
 
 
-# 
+
+
+# 重构vue项目
+
+使用 **vue-cli** 创建一个 **vuejs 3.x** 的 **vue** 项目。
+
+## 1、修改index.html
+
+将文件 **public/index.html** 中的标签 `<body></body>` 中的内容全部清除，并为 `<body></body>` 标签添加属性 `id="index"` 。
+
+```html
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body id="index">
+    <!-- built files will be auto injected -->
+  </body>
+</html>
+```
+
+## 2、修改文件main.js
+
+将 **main.js** 文件中的 `App` 和 `App.vue` 统一修改为 `Index` 和 `Index.vue` 。
+
+```js
+import { createApp } from 'vue'
+import Index from './Index.vue'
+
+createApp(Index).mount('#index')
+```
+
+通过以上的更改之后，整个项目就不是将 `App.vue` 这个根组件渲染到 `index.html` 中的属性为 `id="app"` 的标签内，而是将 `Index.vue` 这个根组件渲染到 `Index.html` 中 `<body id="index"></body>` 的标签内。
+
+## 3、创建新的根组件Index.vue
+
+在 **src/** 目录下新建文件 `Index.vue`，并添加如下内容：
+
+```vue
+<template>
+  <h1>This is test tip.</h1>
+  <h1 v-cloak>{{title}}</h1>
+</template>
+
+<script>
+
+export default { // 组件 vue 实例对象,即 MVVM 中的 VM
+  name: "Index", // 组件 vue 实例的标识符
+  data: function () { // 组件 vue 实例的模型,即 MVVM 中的 M
+      title: "This is a movie lists."
+  },
+}
+</script>
+
+<style scoped>
+
+</style>
+```
+
+此时在当前工程目录下启动 CMD 窗口，输入 `cnpm run serve` 将 vue 项目运行，此时显示内容如下。
+
+![1679879285934](images/1679879285934.png)
+
+## 4、修改文件vue.condig.js
+
+（1）修改**vue-cli**创建的本地web服务器的启动端口号
+
+```js
+module.exports = defineConfig({
+    devServer: {
+        port: 108, // 使用 port 指定新的端口号
+        open: true, // 在 web 服务器创建完成后,自动打开默认的浏览器显示项目
+    }
+})
+```
+
+![1680829999348](images/1680829999348.png)
+
+
+
+## 4、增加view和layout目录
+
+在 **src/** 目录下新增 **view/** 和 **layout/** 目录，此时在 **src/** 目录下有三个目录 **components/** 、**view/** 、**layout/** 三个目录可以存放 **.vue** 文件，这三个目录之间的区别如下：
+
+-   **components/** 目录下存放可以重用的 **vue** 组件；
+-   **view/** 目录下存放单个 web 页面中使用的路由组件；
+-   **layout/** 目录下存放 web 页面，vuejs 是用来构建单页面应用的，但是一个完整的 web 程序必然不止一个页面，此时就需要将这些完整的 web 页面存放在 **layout/** 目录下。
+
+## 5、新建config目录
+
+在 **src/** 目录下新建 **config/** 目录，这个目录负责存放与 **vue-router** 、**axios** 、**vuex** 等框架的配置文件。
+
+（1）**vue-router**的相关配置
+
+```js
+/* src/config/router.config.js */
+import { createRouter, createWebHashHistory } from "vue-router";
+
+const routes = [];
+
+const router = createRouter({
+    history: createWebHashHistory("/"),
+    routes,
+});
+
+export default router;
+```
+
+（2）**axios**的相关配置
+
+```js
+/* src/config/axios.config.js */
+import axios from "axios";
+axios.defaults.baseURL="http://localhost:8080";
+export default axios;
+```
+
+（3）**vuex**的相关配置
+
+```js
+/* src/config/vuex.config.js */
+import { createStore } from "vuex";
+const store = createStore({
+    state () {
+        return {}
+    },
+    mutations: {},
+    actions: {},
+    getters: {},
+});
+
+export default store;
+```
+
+（4）将所有的配置内容导入到文件 **main.js** 中
+
+```js
+/* src/main.js */
+import { createApp } from "vue";
+import Index from "@/Index.vue";
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css"
+import "font-awesome/css/font-awesome.min.css"
+import Router from "@/config/router.config.js";
+import Axios from "@/config/axios.config.js";
+import Vuex from "@/config/vuex.config.js";
+
+const index = createApp(Index);
+
+index.use(ElementPlus);
+index.use(Router);
+index.config.globalProperties.$http = Axios;
+index.use(Vuex);
+
+index.mount("#index");
+```
+
+
+
+
+

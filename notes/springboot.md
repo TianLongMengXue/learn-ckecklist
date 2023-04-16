@@ -4,7 +4,7 @@ springboot 在2018年3月1日发布了springboot 2.0版本，这个版本完全�
 
 需要注意的是**从3.x版本开始springboot只支持jdk17及以上**。
 
-Oracle在2017年的时候就将Java EE 8捐献给了Eclipse基金会，由于Oracle的限制，Eclipse基金会将产品名称更换为Jakarta EE，并使用了新的包名`jakarta.*`取代Java EE的`javax.*`。Jakarta EE 8在2019年时发布，它其实几乎没有做任何功能上的变更，主要是更换包名与品牌名称而已。而由于历史的影响，包括Spring Boot 2.x在内的主流框架，都仍然依赖的是Java EE 8，而没有迁移至Jakarta EE 8。所以在项目中导入的依赖仍然是`javax.*`，但是这一切将在Spring Boot 3.x之后改变，Spring Boot 3.x 同样迁移至了Jakarta EE 9.
+Oracle在2017年的时候就将Java EE 8捐献给了Eclipse基金会，由于Oracle的限制，Eclipse基金会将产品名称更换为Jakarta EE，并使用了新的包名`jakarta.*`取代Java EE的`javax.*`。Jakarta EE 8在2019年时发布，它其实几乎没有做任何功能上的变更，主要是更换包名与品牌名称而已。而由于历史的影响，包括Spring Boot 2.x在内的主流框架，都仍然依赖的是Java EE 8，而没有迁移至Jakarta EE 8。所以在项目中导入的依赖仍然是`javax.*`，但是这一切将在Spring Boot 3.x之后改变，Spring Boot 3.x 同样迁移至了Jakarta EE 9。
 
 # springboot支持类型和支持时间
 
@@ -111,6 +111,14 @@ Spring Boot提供了两种支持类型，分别是：OSS support与Commercial su
 > `mvnw.cmd`程序**Windows操作系统**上处理mevan版本兼容问题， ==该文件可以直接删除，对项目运行没有影响==。
 >
 > `demo.iml`文件，每一个导入IDEA的项目都会生成一个项目同名的`.iml`文件，该文件用于保存你对这个项目的配置 （可以删除，但是删除了之后，程序重新导入后还会生成，而且由于配置丢失可能会造成程序异常）。
+
+## 4、project.basedir目录
+
+在 springboot 项目中 `${project.dir}/` 表示本项目的根目录。
+
+## 5、classpath目录
+
+在 springboot 项目中使用 `classpath:/` 表示本项目的 `${peoject.basedir}/src/mian/resources/` 目录。
 
 # 引入Git/Github
 
@@ -390,7 +398,7 @@ public class Person {
 
 # application.yaml
 
-springboot 的相关配置虽然可以使用配置文件`${project.basedir}/src/main/resources/application.properties`，但是 springboot 官方**推荐**使用配置文件`${project.basedir}/src/main/resources/application.yaml`。
+springboot 的相关配置虽然可以使用配置文件`classpath:/application.properties`，但是 springboot 官方**推荐**使用配置文件`classpath:/application.yaml`。
 
 `.yml` 或 `.yaml` 是使用YAML语言编写的一种以数据为中心的配置文件形式，比json、xml更适合作为配置文件。
 
@@ -1747,6 +1755,488 @@ public class PostController {
 
 ![1679401452004](images/1679401452004.png)
 
+
+
+# 引入Mybatis
+
+## 1、Mybatis基本说明
+
+（1）一个持久层框架，用来对数据进行持久化操作。
+
+（2）持久化：将数据从内存(瞬时存储)存入数据库、io文件中(永久存储)的整个过程。
+
+（3）免除了 `JDBC` 中连接数据库操作、设置参数、获取的结果集。
+
+（4）通过 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录 。
+
+## 2、添加依赖
+
+```xml
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.2.2</version>
+</dependency>
+<!-- MySQL 驱动依赖,一般需要和安装的 MySQL 数据库版本对应-->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.47</version>
+</dependency>
+```
+
+## 3、配置文件
+
+（1）分别在 `${project.basedir}/src/mian/java/com/e3e4e20/` 和 `classpath:/` 目录下新建目录 `mapper/` 。其中 `${project.basedir}/src/mian/java/com/e3e4e20/mapper/` 目录下存放 **Mybatis mapper** 的接口（**java interface**）文件，`classpath:/mapper/` 目录下存放 **Mybatis mapper** 的映射文件（**mapper.xml**） 。
+
+（2）在文件 `classpath:/application.yaml` 中添加如下配置：
+
+```yaml
+spring.datasource.url=jdbc:mysql://192.168.1.110:3306/db_test?useSSL=false&characterEncoding=utf8
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+mybatis.mapper-locations=classpath:/mapper/*.xml
+```
+
+（3）在 **spring boot** 的启动类文件中添加注解 `@MapperScan("com.example.mapper")`
+
+```java
+@SpringBootApplication
+@MapperScan("com.example.mapper")
+public class DemoApplication { 
+    public static void main(String[] args) { 
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+```
+
+## 4、连接数据库
+
+（1）在数据库中新建数据库 **db_test** 并新建数据表 **t_login**
+
+```shell
+CREATE DATABASE `db_test` CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
+
+CREATE TABLE `t_login`  (
+  `id` int(16) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `word` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+insert into `t_login` (`id`,`name`,`word`) values(`1`,`name`,`word`);
+```
+
+（2）在目录 `src/test/java/com/e3e4e20/` 下新建目录 `utils/` 并新建文件 `MySQLConnectionTest.java` 并添加如下内容
+
+```java
+@SpringBootTest // spring boot 单元测试注解,使用该注解标识这个类是一个测试类
+public class MySQLConnection {
+    /*
+    * @Autowire 一定需要添加,不然项目本身没有任何错误,
+    * 但是一旦运行测试就会导致的 NullPointerException
+    * 并且只有紧挨着 @Autowire 的一个成员变量起作用，
+    * 之后的成员变量需要再添加注解 @Autowire
+    * */
+    @Autowired
+    private DataSource dataSource;
+    @Test
+    public void testDataSource() throws SQLException {
+        // 测试数据源（数据库连接是否成功）
+        System.out.println(dataSource.getConnection());
+    }
+}
+```
+
+## 5、接口文件
+
+在目录 `src/main/java/com/e3e4e20/mapper/` 下新建文件 **LoginMapper.java**，并添加如下内容
+
+```java
+@Mapper
+@Repository
+public interface LoginMapper {
+    String selectUserById (Integer userid);
+}
+```
+
+## 6、映射文件mapper.xml
+
+在目录 `classpath:/mapper/` 新建文件 **LoginMapper.xml** ，并添加如下内容
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e3e4e20.mapper.LoginMapper">
+    <select id="selectUserById" parameterType="Integer" resultType="String">
+    	select `name` from `t_login` where `id`=#{userid}
+    </select>
+</mapper>
+```
+
+---
+
+`namespace="com.e3e4e20.mapper.LoginMapper"` 
+
+属性 `namespace` 需要指定的是映射的接口文件（java interface）。
+
+---
+
+`<select id="selectUserById" parameterType="Integer" resultType="String">`
+
+（1）属性 `id` 是 `namespace` 映射的接口文件中的方法名称；
+
+（2）属性 `parameterType` 是 `id` 指定的方法的参数类型；
+
+（3）属性 `resultType` 是 `id` 指定的方法的返回值的类型。
+
+---
+
+```shell
+select `name` from `t_login` where `id`=#{userid}
+```
+
+```java
+String selectUserById (Integer userid);
+```
+
+在 **Mybatis** 中使用 `#{}` 方式对 SQL 语句传递参数，在 `#{}` 中参数的名称需要和映射接口方法的参数名称一致。
+
+## 7、参数属性parameterType
+
+（1）单个基本类型参数
+
+```shell
+String selectUserById (Integer userid);
+
+<select id="selectUserById" parameterType="Integer" resultType="String">
+	select `name` from `t_login` where `id`=#{userid}
+</select>
+```
+
+---
+
+属性 `parameterType="Integer"` 这里指的是 `String selectUserById (Integer userid)`  这个方法的参数类型是 `Integer` 类型。
+
+---
+
+（2）多个基本类型参数
+
+```java
+String selectUserByUseridUsername (Integer userid, String username);
+```
+
+此时，映射接口文件中方法的参数是 `Integer` 和 `String` ，但是 `parameterType` 没办法出现两个，也不能同时传递两个参数类型；
+
+实际上，当映射的接口文件传递的是基本类型参数时，不论是一个还是多个都可以省略`parameterType` 属性
+
+```xml
+String selectUserById (Integer userid);
+
+<select id="selectUserById" resultType="String">
+	select `name` from `t_login` where `id`=#{userid}
+</select>
+```
+
+```xml
+String selectUserByUseridUsername (Integer userid, String username);
+
+<select id="selectUserByUseridUsername" resultType="String">
+	select `name` from `t_login` where `id`=#{userid} and `name`=#{username}
+</select>
+```
+
+（3）`@Param` 注解传参
+
+```java
+String selectUserById (Integer userid);
+
+// 对于映射接口方法,可以在参数中使用 @Param 注解
+
+String selectUserById (@Param("id") Integer userid);
+```
+
+此时，在映射mapper文件中，`#{}` 中的参数名称就需要和 `@Param` 注解中名称保持一致。
+
+```xml
+<select id="selectUserById" resultType="String">
+	select `name` from `t_login` where `id`=#{id}
+</select>
+```
+
+```xml
+String selectUserByUseridUsername (@Param("id") Integer userid, @Param("name") String username);
+
+<select id="selectUserByUseridUsername" resultType="String">
+	select `name` from `t_login` where `id`=#{id} and `name`=#{name}
+</select>
+```
+
+（4）Map传参
+
+```java
+Map<String,Object> map = new HashMap<>();
+map.put("id", 1);
+map.put("word", "word");
+```
+
+```java
+String selectUserByUseridUsername(Map<String,Object> map);
+```
+
+此时，映射接口文件方法的参数是一个 `Map` 集合，那么对应的映射mapper文件中就需要使用 `parameter="java.util.Map"` 指明参数类型。
+
+在 SQL 语句中，`#{}` 中的参数名称是 `Map` 集合中的 `Key` 值的名称。
+
+```xml
+<select id="selectUserByUseridUsername" parameterType="java.util.Map" resultType="String">
+	select `name` from `t_login` where `id`=#{id} and `name`=#{name}
+</select>
+```
+
+（5）实体类（entity）传参
+
+在目录 `src/main/java/com/e3e4e20/entity/` 下新建文件 `LoginEntity`
+
+```java
+public class LoginEntity {
+    private String id;
+    private String name;
+    private String word;
+    // 以下省略无参、有参构造方法,Getter Setter toString 方法
+}
+```
+
+```java
+String selectUserByUseridUsername(LoginEntity loginEntity);
+```
+
+此时，此时，映射接口文件方法的参数是一个实体类（entity），那么对应的映射mapper文件中就需要使用 `parameter="com.e3e4e20.entity.LoginEntity"` 指明参数类型。
+
+在 SQL 语句中，`#{}` 中的参数名称是实体类（entity）中成员变量的名称。
+
+```xml
+<select id="selectUserByUseridUsername" parameterType="com.e3e4e20.entity.LoginEntity" resultType="String">
+	select `name` from `t_login` where `id`=#{id} and `name`=#{name}
+</select>
+```
+
+## 8、返回值属性resultType
+
+（1）基本类型的返回值
+
+```java
+String selectUserById (@Param("id") Integer userid);
+```
+
+```xml
+<select id="selectUserById" resultType="String">
+	select `name` from `t_login` where `id`=#{id}
+</select>
+```
+
+返回值是基本类型时，只需要在 `resultType` 直接指定类型即可。
+
+（2）List类型返回值
+
+```java
+/*
+ 特别注意，这里的成员变量的名称一定要和数据库表中字段的名称保持一致
+*/
+public class LoginEntity {
+    private String id;
+    private String name;
+    private String word;
+    // 以下省略无参、有参构造方法,Getter Setter toString 方法
+}
+```
+
+```java
+List<LoginEntity> selectAllLoginUser ();
+```
+
+```xml
+<!--
+	LoginEntity : 成员变量名称 id,name,word
+	数据库表 t_login 的字段名称 id,name,word
+	一定要一一对应,且名称一致,不然 List<LoginEntity> 中的接收的所有数据都是 null
+-->
+<select id="selectAllLoginUser" resultType="com.e3e4e20.entity.LoginEntity">
+	select * from `t_login`
+</select>
+```
+
+当映射接口文件方法的返回值类型是一个 `List` 的时候，`resultType` 属性只需要指定为 `List` 的元素类型即可。
+
+（3）Map类型返回值，返回数据库表中的一行数据
+
+```java
+Map<String,Object> selectUserByUserid(@Param("id") Integer userid);
+```
+
+```xml
+<select id="selectUserByUserid" resultType="java.util.Map">
+	select * from `t_login` where `id`=#{id}
+</select>
+```
+
+查询结果，`Map<String,Object>` 中，`String` 对应的是数据库表中的字段名称（`id`,`name`,`word`），`Object` 对应是查询出来的表中的数据值。
+
+（4）Map类型返回值，返回数据库表中的多行数据
+
+```java
+@MapKey("id")
+Map<Integer,LoginEntity> selectAllLoginUser();
+```
+
+```xml
+<select id="selectAllLoginUser" resultType="com.e3e4e20.entity.LoginEntity">
+	select * from `t_login`
+</select>
+```
+
+查询结果，`Map<Integer,LoginEntity>` 中，通过注解 `@MapKey("id")` 指定 `Integer` 的值为字段 `id` 的值，`LoginEntity` 对应的是数据库表中每一行的数据。
+
+## 9、返回值属性resultMap
+
+```java
+// 实体类内容
+public class LoginEntity {
+    private String userid;
+    private String username;
+    private String password;
+    // 以下省略无参、有参构造方法,Getter Setter toString 方法
+}
+
+// 数据库表中的字段名称, id,name,word
+```
+
+此时，若是使用这个实体类作为属性 `resultType` 的值，那么查询结果就会因为 实体类成员变量名称和数据库表字段名称不一致无法赋值，导致返回值为 `null`。
+
+此时，就需要使用 `resultMap` 进行实体类成员变量和数据库表中字段名称进行一一映射，确保查询的结果可以正确的赋值给实体类成员变量。
+
+```java
+LoginEntity selectLoginUserByUserid (@Param("id") Integer userid);
+```
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e3e4e20.mapper.LoginMapper">
+    
+    <resultMap id="Login" type="com.e3e4e20.entity.LoginEntity">
+        <result property="userid" column="id"/>
+        <result property="username" column="name"/>
+        <result property="password" column="word"/>
+    </resultMap>
+    
+    <select id="selectLoginUserByUserid" resultMap="Login">
+    	select `name` from `t_login` where `id`=#{id}
+    </select>
+</mapper>
+```
+
+----
+
+```xml
+<resultMap id="Login" type="com.e3e4e20.entity.LoginEntity">
+    <result property="userid" column="id"/>
+    <result property="username" column="name"/>
+    <result property="password" column="word"/>
+</resultMap>
+```
+
+（1）使用 `id` 属性标识这个映射关系，映射的对象使用属性 `type` 来指定；
+
+（2）属性 `property` 的值为属性 `type` 指定的实体类的成员变量的名称；
+
+（3）属性 `column` 的值为数据库表中字段的名称。
+
+----
+
+```xml
+<resultMap id="Login" type="com.e3e4e20.entity.LoginEntity">
+
+<select id="selectLoginUserByUserid" resultMap="Login">
+```
+
+在 SQL 语句中使用 `resultMap` 属性调用这个映射关系。
+
+## 10、CRUD
+
+（1）在 `src/main/java/com/e3e4e20/entity/` 目录下新建文件 **LoginEntity.java** 
+
+```java
+public class LoginEntity {
+    private String userid;
+    private String username;
+    private String password;
+    // 以下省略无参、有参构造方法,Getter Setter toString 方法
+}
+```
+
+（2）在 `src/main/java/com/e3e4e20/mapper/` 目录下新建文件 **LoginMapper.java**
+
+```java
+@Mapper
+@Repository
+public interface LoginMapper {
+    String selectUserid (@Param("username") String username, @Param("password") String password);
+    
+    LoginEntity selectUserByUserid (@Param("id") String userid);
+    
+    List<LoginEntity> selectAllLoginUser();
+    
+    int addLoginUser(LoginEntity loginEntity);
+    
+    int updatePasswordByUserid (@Param("id") String userid, @Param("password") String password);
+    
+    int deleteLoginUserByUserid (@Param("id") String userid);
+}
+```
+
+（3）在 `classpath:/mapper/` 目录下新建文件 `LoginMapper.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.e3e4e20.mapper.LoginMapper">
+    
+    <resultMap id="Login" type="com.e3e4e20.entity.LoginEntity">
+        <result property="userid" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+    </resultMap>
+    
+    <select id="selectUserid" resultType="String">
+        select `id` from `t_login` where `username`=#{username} and `password`=#{password}
+    </select>
+    
+    <select id="selectUserByUserid" resultMap="Login">
+        select * from `t_login` where `id`=#{id}
+    </select>
+    
+    <select id="selectAllLoginUser" resultMap="Login">
+        select * from `t_login`
+    </select>
+    
+    <insert id="addLoginUser">
+        insert into `t_login` (`id`,`username`,`password`) values(#{id},#{username},#{password})
+    </insert>
+    
+    <update id="updatePasswordByUserid">
+        update `t_login` set `password`=#{password} where `id`=#{id}
+    </update>
+    
+    <delete id="deleteLoginUserByUserid">
+        delete from `t_login` where `id`=#{id}
+    </delete>
+</mapper>
+```
+
+
+
 # 引入Mybatis-Plus
 
 ## 1、ORM简介
@@ -2078,7 +2568,176 @@ spring.devtools.restart.exclude=static/**
 
 ![1679300929019](images/1679300929019.png)
 
+# 引入jwt-token
 
+[localStorage Session Cookie说明](https://zhuanlan.zhihu.com/p/207106785)
+
+## 1、前后端认证流程
+
+（1）**Session** 认证
+
+-   前端将用户的登录信息（用户名称和用户密码）发送给后端；
+-   后端验证通过之后，将用户信息（用户身份信息、权限、登录时间等）保存在 **session** 中（保存的信息位于服务器中），并将这个 **session**  的 **id** 发送给前端；
+-   前端使用 **localStorage** 、**session** 、**cookie** 保存这个 **id** ，之后每一次前端向后端发送的请求都会将这个 **id** 作为请求的一部分发送给后端；
+-   后端收到这个 **id** 之后，从 **session** 中读取用户信息。
+
+虽然 **Session** 认证的方式应用非常普遍，但是 **Session** 认证的扩展性不好。对于服务器集群，或者是跨域的服务导向架构，就要求 **Session** 数据共享，每台服务器都能够读取 **Session**，（保证每一台服务器读取到的 **Session** 数据相同）针对此种问题—般有两种方案：
+
+-   一种解决方案是 **Session** 数据持久化，写入数据库或别的持久层（**Redis**）。各种服务收到请求后，都向持久层请求数据。这种方案的优点是架构清晰，缺点是工程量比较大。
+-   一种方案是服务器不再保存 **Session** 数据，所有数据都保存在客户端，每次请求都发回服务器。Token认证就是这种方案的一个代表。
+
+ ![1679300876928](images/1679300876928.png)
+
+（2）**Token** 认证
+**token** 是由后端产生的一串字符串，是前端访问资源接口(**API**)时所需要的资源凭证，流程如下：
+
+-   前端使用用户名跟密码请求登录，后端收到请求，去验证用户名与密码；
+-   后端验证成功后，后端会签发一个 **token** 并把这个 **token** 发送给前端；
+-   前端收到 **token** 以后，使用 **localStorage** 、**session** 、**cookie** 存储起来；
+-   前端每次向服务端请求资源的时候需要带着服务端签发的 **token** ；
+-   后端收到请求，去验证客户端请求里面带着的 **token**，如果验证成功，就向客户端返回请求的数据。
+
+**Token** 认证的特点：
+
+-   基于 **token** 的用户认证是一种后端无状态的认证方式，后端不用存放 **token** 数据；
+-   用解析 **token** 的计算时间换取 **session** 的存储空间，从而减轻服务器的压力，减少频繁的查询数据库，**token** 完全由应用管理，所以它可以避开同源策略。
+
+ ![1679300876929](images/1679300876929.png)
+
+
+
+## 2、JWT基本说明
+
+**JSON Web Token** (简称JWT）是一个 **Token** 认证的具体实现方式，是目前最流行的跨域认证解决方案。
+
+**JWT** 的原理是，后端验证成功以后，生成一个JSON对象，发回给用户，具体如下：
+
+```json
+{
+    "姓名":"张三",
+    "角色":"管理员",
+    "到期时间": "2018年7月1日0点0分"
+}
+```
+
+前端与后端通信的时候，都要发回这个 **JSON** 对象。后端完全只靠这个对象认定用户身份。为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名。
+
+前端收到后端发送的 **JWT**，可以储存在 **Cookie** 里面，也可以储存在 **localStorage**。前端每次向后端发送请求，都要带上这个 **JWT**，虽然可以把它放在 **Cookie** 里面自动发送，但是这样不能跨域。因此更好的做法是放在 **HTTP** 请求的头信息`Authorization`字段里面，单独发送。
+
+## 3、JWT基本构成
+
+**JWT** 的由三个部分组成，依次如下：**Header**(头部)、**Payload**(负载)、**Signature**(签名)。
+
+（1）**Header**(头部)
+**Header** 部分是一个 **JSON** 对象，描述 **JWT** 的元数据。
+
+```json
+{
+    "a1g": "HS256",
+    "typ": "iwT"
+}
+```
+
+-   `alg` 属性表示签名的算法(algorithm)，默认是HMAC SHA256(写成HS256)
+-   `typ` 属性表示这个令牌(token)的类型(type) ,JWT令牌统一写为JWT最后，将上面的JSON对象使用Base64URL 算法转成字符串。
+
+（2）**Payload**(负载)
+
+**Payload** 部分也是一个 **JSON** 对象，用来存放实际需要传递的数据。JWT规了7个官方字段，供选用。
+
+```shell
+iss (issuer):签发人
+exp (expiration time):过期时间
+sub (subject):主题
+aud (audience):受众
+nbf (Not Before):生效时间
+iat (lssued At):签发时间
+jti (JWT ID):编号
+```
+
+注意，==JWT默认是不加密的，任何人都可以读到，所以不要把秘密信息放在个部分==。**Payload** 部分也要使用Base64URL算法转成字符串。
+
+（3）**Signature**(签名)
+
+**Signature** 部分是对前两部分的签名，防止数据篡改。
+
+-   首先，需要指定一个密钥(secret)。这个密钥只有服务器才知道，不能泄露给用户;
+-   然后，使用Header里面指定的签名算法（默认是 HMAC SHA256)，按照下面的公式产生签名。
+
+```shell
+HMACSHA256(
+	base64Ur1Encode(header) + "."+
+	base64Ur1Encode(pay1oad),
+	secret)
+```
+
+（4）生成 **JWT-token**
+
+算出签名以后，把 **Header**、**Payload**、**Signature** 三个部分拼成一个字符串，每个部分之间用 **.** 分隔，就可以发送给前端。
+
+![1680883303050](images/1680883303050.png)
+
+三个部分最终组合成完整的字符串如下：
+
+```shell
+# Header.Payload.Signature
+eyJhbGci0iJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJzdWIiOiIxMjMENTY30DkwIiwibmFtZSI6IkpvaG4gRG91IiwiaXNTb2NpYWwiOnRydwV9.
+4pcPyMD09olPSyXnrXCjTwXyr4BsezdI1AVTmud2fU4
+```
+
+## 4、添加依赖
+
+```xml
+<!-- JWT-Token 依赖 -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.1</version>
+</dependency>
+```
+
+## 5、生成token
+
+```java
+public class TokenConfig {
+    // token的有效期为 7 天(7*12*60*60=604800),这里使用的是秒
+    private static long expire = 604800;
+    // 秘钥
+    private static String secret = "whatdoesnotdefeatyoumakesyoustronger";
+    
+    public static String createdToken (String userid) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + 1000 * expire);
+        return Jwts.builder()
+                .setHeaderParam("type", "JWT")
+                .setSubject(userid)
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS512,secret)
+                .compact();
+    }
+}
+```
+
+## 6、解析token
+
+```java
+public class TokenConfig {
+    // token的有效期为 7 天(7*12*60*60=604800),这里使用的是秒
+    private static long expire = 604800;
+    // 秘钥
+    private static String secret = "whatdoesnotdefeatyoumakesyoustronger";
+    
+    public static Claims getClaimsByToken (String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+}
+
+```
 
 
 

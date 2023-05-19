@@ -824,7 +824,51 @@ spring:
 
 ![1679223248122](images/1679223248122.png)
 
+# banner
 
+## 1、banner基本说明
+
+springboot 项目在启动的时候会在控制台中默认输出如下内容：
+
+```shell
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.10)
+```
+
+这个文字图形在 springboot 中被称为 banner 。
+
+## 2、自定义banner
+
+在 `classpath:/` 目录下新建一个文本文件 **banner.txt** 并在文件中添加如下内容：
+
+```text
+*************************************************************************
+这是一个 springboot 测试项目
+*************************************************************************
+```
+
+运行 springboot 项目时，就会输出 **banner.txt** 文件中的内容。
+
+![1681976579353](images/1681976579353.png)
+
+还可以在 **application.yaml** 文件中添加 `spring.banner.location=path` 的方式指定 banner.txt 文件的位置。
+
+````yaml
+spring.banner.location=classpath:/config/Banner.txt
+````
+
+````text
+*************************************************************************
+这是 classpath:/config/Banner.txt 文件中的 banner
+*************************************************************************
+````
+
+![1681977370064](images/1681977370064.png)
 
 # springboot自动配置的原理-----待整理
 
@@ -2482,7 +2526,6 @@ HTTP 状态码由三个十进制数字组成，第一个十进制数字定义了
 | ------ | ------------------------------- | ------------------------------------------------------------ |
 | 100    | Continue                        | 继续。客户端应继续其请求                                     |
 | 101    | Switching Protocols             | 切换协议。服务器根据客户端的请求切换协议。只能切换到更高级的协议，例如，切换到HTTP的新版本协议 |
-|        |                                 |                                                              |
 | 200    | OK                              | 请求成功。一般用于GET与POST请求                              |
 | 201    | Created                         | 已创建。成功请求并创建了新的资源                             |
 | 202    | Accepted                        | 已接受。已经接受请求，但未处理完成                           |
@@ -2490,7 +2533,6 @@ HTTP 状态码由三个十进制数字组成，第一个十进制数字定义了
 | 204    | No Content                      | 无内容。服务器成功处理，但未返回内容。在未更新网页的情况下，可确保浏览器继续显示当前文档 |
 | 205    | Reset Content                   | 重置内容。服务器处理成功，用户终端（例如：浏览器）应重置文档视图。可通过此返回码清除浏览器的表单域 |
 | 206    | Partial Content                 | 部分内容。服务器成功处理了部分GET请求                        |
-|        |                                 |                                                              |
 | 300    | Multiple Choices                | 多种选择。请求的资源可包括多个位置，相应可返回一个资源特征与地址的列表用于用户终端（例如：浏览器）选择 |
 | 301    | Moved Permanently               | 永久移动。请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替 |
 | 302    | Found                           | 临时移动。与301类似。但资源只是临时被移动。客户端应继续使用原有URI |
@@ -2499,13 +2541,12 @@ HTTP 状态码由三个十进制数字组成，第一个十进制数字定义了
 | 305    | Use Proxy                       | 使用代理。所请求的资源必须通过代理访问                       |
 | 306    | Unused                          | 已经被废弃的HTTP状态码                                       |
 | 307    | Temporary Redirect              | 临时重定向。与302类似。使用GET请求重定向                     |
-|        |                                 |                                                              |
 | 400    | Bad Request                     | 客户端请求的语法错误，服务器无法理解                         |
 | 401    | Unauthorized                    | 请求要求用户的身份认证                                       |
 | 402    | Payment Required                | 保留，将来使用                                               |
 | 403    | Forbidden                       | 服务器理解请求客户端的请求，但是拒绝执行此请求               |
 | 404    | Not Found                       | 服务器无法根据客户端的请求找到资源（网页）。通过此代码，网站设计人员可设置"您所请求的资源无法找到"的个性页面 |
-| 405    | Method Not Allowed              | 客户端请求中的方法被禁止                                     |
+| 405    | Method Not Allowed              | 客户端请求中的方法被禁止，HTTP请求需要为GET方法，即controller使用的不是GET方式接收数据 |
 | 406    | Not Acceptable                  | 服务器无法根据客户端请求的内容特性完成请求                   |
 | 407    | Proxy Authentication Required   | 请求要求代理的身份认证，与401类似，但请求者应当使用代理进行授权 |
 | 408    | Request Time-out                | 服务器等待客户端发送的请求时间过长，超时                     |
@@ -2518,7 +2559,6 @@ HTTP 状态码由三个十进制数字组成，第一个十进制数字定义了
 | 415    | Unsupported Media Type          | 服务器无法处理请求附带的媒体格式                             |
 | 416    | Requested range not satisfiable | 客户端请求的范围无效                                         |
 | 417    | Expectation Failed              | 服务器无法满足Expect的请求头信息                             |
-|        |                                 |                                                              |
 | 500    | Internal Server Error           | 服务器内部错误，无法完成请求                                 |
 | 501    | Not Implemented                 | 服务器不支持请求的功能，无法完成请求                         |
 | 502    | Bad Gateway                     | 作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应 |
@@ -2736,13 +2776,423 @@ public class TokenConfig {
                 .getBody();
     }
 }
-
 ```
 
+# 引入logging
+
+## springboot的日志说明
+
+springboot 默认使用 **SLF4J+Logback** 记录日志，并在项目启动时，以 info 级别输出到控制台。
+
+![1681978051246](images/1681978051246.png)
+
+一条日志的内容包含如下几个方面：
+
+- 日期时间，以 **YYYY-MM-DD HH:MM:SS.ms** （精确到毫秒）；
+- 该条日志的级别，trace、debug、info、warn、error、fatal（6个级别）；
+- 进程的id
+- 分隔符 **—** 表示日志实际开始的位置；
+- 线程名称使用 **[]** 括起来（可能会截断控制台的输出）；
+- 日志名称，一般是源代码的类名；
+- 日志的具体内容
+
+## 添加Logback依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-logging</artifactId>
+</dependency>
+```
+
+## 日志级别
+
+日志的级别有 6 类，从低级别到高级别分别为 **trace < debug < info < warn < error < fatal** 。
+
+输出日志时，只会输出当前级别和高级别的日志，而不会输出低级别的日志；如 spring boot 默认的日志级别是 info 那么再输出日志时，只会输出 info 、warn、error、fatal 级别的日志，不会输出 trace 和 debug 级别的日志。
+
+## 添加日志输出
+
+```java
+@SpringBootTest
+public class LoggerTest {
+    private final Logger logger = LoggerFactory.getLogger(LoggerTest.class);
+    @Test
+    void testLogging () {
+        logger.info("info");
+        logger.warn("warn");
+        logger.error("error");
+    }
+}
+```
+
+![1681979708681](images/1681979708681.png)
+
+## 日志配置
+
+在 spring boot 中 application.yaml 文件提供了如下的项目配置日志信息：
+
+```properties
+# 设置日志输出的级别,*为任意路径
+logging.level.*=info
+
+logging.level.root=warn # 默认日志输出的级别
+logging.level.org.springframeword.web=warn # 指定类的日志输出级别
+
+# 日志文件的名称
+logging.file=spring.log
+# 日志文件的存储路径,若是没有指定logging.file,那么文件名称默认为spring.log
+logging.path
+# 控制台中日志的样式
+logging.pattern.console
+
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n
+
+# 日志文件中日志的样式
+logging.pattern.file
+# 输出不同级别日志的样式,默认是 %5p
+ logging.pattern.level
+ # 当输出日志发生异常时的转换字
+ logging.exception-conversion-word
+ # 指定当前进程的 id
+ PID
+```
+
+## 自定义日志配置
+
+spring boot 项目中除了使用 applications.yaml 文件对日志进行一些基本的配置，还可以使用日志配置文件对日志的内容进行更为详细配置。
+
+（1）使用不同的日志框架，就需要使用不同名称的配置文件：
+
+- Logback：logback-spring.xml、logback-srping.groovy、logback.xml、logback.groovy
+- Log4j：log4j-spring.properties、log4j-spring.xml、log4j.properties、log4j.xml
+- Log4j2：log4j2-spring.xml、log4j2.xml
+- JDK(java util logging)：logging.properties
+
+spring 官方推荐使用 **-spring** 的文件名称作为日志的配置文件。
+
+以上默认的配置文件的名称，可以直接在 `classpath:` 目录下创建。
+
+ （2）还可以在 **application.yaml** 文件使用 `logging.config-classpath=relativePath` 指定自定义名称的配置文件。
+
+（3）根节点 `configuration`
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+<!-- scan 设置为 true 时,当日子文件发生改变时,将会重新加载配置文件,默认为 true -->
+<!-- scanPeriod 设置扫描配置文件发生改变的时间间隔,当 scan 为 true 时,该属性生效,默认时间为 1 分钟,默认单位是 ms(没有给出时间单位时,使用默认时间单位) -->
+<!-- debug 当设置为 true 时,输出 logback 内部的日志信息,实时查看 logback 运行状态,默认为 false -->
+</configuration>
+```
+
+（4）子节点 `contextName`
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+<!-- contextName 设置上下文名称,设置之后可以在标签元素中使用 %contextName% 引用设置的名称,一般不使用 -->
+    <contextName>logback</contextName>
+</configuration>
+```
+
+（5）子节点 `property`
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+<!-- property 设置变量,设置之后可以在标签元素中使用 ${name} 的方式引用该变量,值为 value 对应的内容 -->
+    <property name="logback.appname" value="appname"/>
+</configuration>
+```
+
+（6）子节点 `appender`
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 将日志内容输出到控制台 ConsoleAppender -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 输出到控制台使用标签 layout 控制日志的输出的格式 -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!-- 使用 pattern 标签控制输出的日志的格式 -->
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+    <!-- 将日志输出到文件中 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的存储位置 -->
+        <File>C:/workspace/webapp/demo/logback.log</File>
+        <!-- 输出到文件使用标签 encoder 控制日志的输出的格式 -->
+        <encoder>
+            <charset>UTF-8</charset>
+            <!-- 使用 pattern 标签控制输出的日志的格式 -->
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+</configuration>
+```
+
+拆分日志文件，将指定级别的日志输出到指定的文件中。
+
+```xml
+<appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 由于 info 级别的日志中会包含 warn,error 级别的日志在内,因此需要将这两个级别的日志过滤掉 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤掉 warn 级别的日志 -->
+            <level>warn</level>
+            <!-- 级别匹配为 warn 的就过滤 -->
+            <onMatch>deny</onMatch>
+            <!-- 级别不匹配 warn 的就输出 -->
+            <onMismatch>accept</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤掉 error 级别的日志 -->
+            <level>error</level>
+            <!-- 级别匹配为 error 的就过滤 -->
+            <onMatch>deny</onMatch>
+            <!-- 级别不匹配 error 的就输出 -->
+            <onMismatch>accept</onMismatch>
+        </filter>
+        <!-- <File>与<FileNamePattern>两个同时存在时,那么当天的日志存放在<File>指定的文件名中,  -->
+        <!-- 而非当日的日志会被重命名为<FileNamePattern>指定的文件名中  -->
+        <!-- 若是没有<File>只有<FileNamePattern>时,那么只会使用<FileNamePattern>指定的文件名 -->
+        <File>C:/workspace/webapp/demo/logback.info.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>C:/workspace/webapp/demo/logback.info.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 只保留最近90天的日志 -->
+            <maxHistory>90</maxHistory>
+            <!-- 指定日志文件的上限大小,当大小超过时,自动删除旧的日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+```
+
+(7)子节点 `root`
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <root level="debug">
+<!-- root 结点为必选结点,用来自动最基础的日志输出级别,只有一个 level 属性,可以包含一个或者多个便签 -->
+<!-- level 指定日志输出级别,有 trace,debug,info,warn,error,all,off 七个属性值,大小写不区别,默认为 debug -->
+        <appender-ref ref="console" />
+<!-- ref 指定的属性值必须和 appender 的 name 属性值对应 -->
+        <appender-ref ref="file" />
+    </root>
+</configuration>
+```
+
+(8)子节点 `logger`
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 打印 mapper 包下所有类的日志信息,日志的级别为 debug ,并将此 logger 打印的信息向上传递 -->
+    <!-- 不指定 level 属性,那么该 logger 默认使用 <root> 结点指定的 level -->
+    <!-- 不指定 addtivity ,该属性默认为 true -->
+    <logger name="com.e3e4e20.mapper" level="debug" addtivity="true" />
+</configuration>
+```
+
+不指定 **level** 属性，不指定 **appender** 属性：
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    
+    <!-- 这里省略了 <appender> 属性 name 为 console 和 file 的定义 -->
+    
+    <logger name="com.e3e4e20.mapper" addtivity="true" />
+    
+    <!-- 当执行 mapper 包下的类中的方法时,<logger>会将级别大于等于 info 的日志传递给 <root> 打印,而<logger> 本身不打印任何信息  -->
+    <!-- <root> 将下级传递的信息交付给name属性值为 "console" 和 "file" 的 <appender> 处理-->
+    
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+</configuration>
+```
+
+指定 **level** 属性，指定 **appender** 属性：
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    
+    <!-- 这里省略了 <appender> 属性 name 为 console 和 file 的定义 -->
+    
+    <logger name="com.e3e4e20.mapper" addtivity="false" level="debug">
+        <appender-ref ref="console" />
+    </logger>
+    
+    <!-- 当执行 mapper 包下的类中的方法时,<logger>会将级别大于等于 debug 的日志交付给name属性值为 "console" 的 <appender> 处理  -->
+    <!-- <logger>不会将日志传递给 <root> 打印 -->
+    <!-- 若是将 addtivity="false" 改为 addtivity="true" 那么 <logger>会将日志传递给 <root> 打印,这样在 console 控制台中日志信息就会被打印两次-->
+    
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+</configuration>
+```
+
+（9）多环境日志输出
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <!-- 这里省略了 <appender> 属性 name 为 console 和 file 的定义 -->
+
+    <!-- 测试环境+开发环境,多个属性值使用 , 隔开 -->
+    <springProfile name="test,dev">
+        <logger name="com.e3e4e20.mapper" addtivity="false" level="debug">
+            <appender-ref ref="console" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+        <logger name="com.e3e4e20.mapper" addtivity="false" level="warn">
+            <appender-ref ref="file" />
+        </logger>
+    </springProfile>
 
 
-# 一些散装知识，需要后期整理的
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+</configuration>
+```
 
-404 --- > URL错误
+在配置文件 **application.yaml** 中添加环境选项配置：
 
-405 ---> HTTP请求需要为GET方法，即controller使用的不是GET方式接收数据
+```yaml
+spring.profiles.active: dev
+```
+
+# 引入汉字转拼音
+
+## 1、pinyin4j基本说明
+
+[pinyin4j](http://sourceforge.net/projects/pinyin4j/files/) 是一个将将简体和繁体中文转换到成拼音的Java开源类库，支持同一汉字有多个发音，支持拼音的格式化输出（包含声调）。
+
+## 2、添加pinyin4j依赖
+
+```xml
+<dependency>
+    <groupId>com.belerweb</groupId>
+    <artifactId>pinyin4j</artifactId>
+    <version>2.5.0</version>
+</dependency>
+```
+
+## 3、常用的方法
+
+```java
+/*
+ * HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
+ *
+ * 控制大小写
+ * UPPERCASE：大写  (ZHONG)
+ * LOWERCASE：小写  (zhong)
+ * defaultFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+ *
+ * WITHOUT_TONE：无音标  (zhong)
+ * WITH_TONE_NUMBER：1-4数字表示英标  (zhong4)
+ * WITH_TONE_MARK：直接用音标符（必须WITH_U_UNICODE否则异常）  (zhòng)
+ * defaultFormat.setToneType(HanyuPinyinToneType.WITH_TONE_NUMBER);
+ *
+ * WITH_V：用 "v" 表示 "ü"  (nv)
+ * WITH_U_AND_COLON：用"u:"表示 "ü"  (nu:)
+ * WITH_U_UNICODE：直接用 "ü" (nü)
+ * defaultFormat.setVCharType(HanyuPinyinVCharType.WITH_U_UNICODE);
+ *
+ * toHanyuPinyinStringArray如果传入的字符不是汉字不能转换成拼音，那么会直接返回null。
+ *
+ * String[] pinyin = PinyinHelper.toHanyuPinyinStringArray('重', defaultFormat);
+ * for(String str: pinyin){
+ *    System.out.println(str);
+ * }
+ */
+```
+
+## 4、获取汉字首字母
+
+```java
+/**
+   * 获得一个中文汉字拼音首字母,且该字母为大写
+   * @param chinese 一个中文汉字
+   * @return 该汉字的首字母且该字母大写
+   */
+public String getUpperAlphabet(String chinese) {
+    StringBuilder pinyinName = new StringBuilder();
+    char[] nameChar = chinese.toCharArray();
+    HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
+    defaultFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+    defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+    for (char c : nameChar) {
+        if (c > 128) {
+            try {
+                pinyinName.append(PinyinHelper.toHanyuPinyinStringArray(
+                    c, defaultFormat)[0].charAt(0));
+            } catch (BadHanyuPinyinOutputFormatCombination e) {
+                e.printStackTrace();
+            }
+        } else {
+            pinyinName.append(c);
+        }
+    }
+    return pinyinName.toString();
+}
+```
+
+## 5、汉字转为拼音字母字符串
+
+```java
+/**
+     * 将字符串中的中文转化为拼音,英文字符不变
+     * @param chineseString 汉字
+     * @return 一个纯小写字母的字符串
+     */
+public String getLowerPingYin(String chineseString) {
+    HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+    format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+    format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+    format.setVCharType(HanyuPinyinVCharType.WITH_V);
+    StringBuilder output = new StringBuilder();
+    if (chineseString != null && chineseString.length() > 0
+        && !"null".equals(chineseString)) {
+        char[] input = chineseString.trim().toCharArray();
+        try {
+            for (char c : input) {
+                if (Character.toString(c).matches(
+                    "[\\u4E00-\\u9FA5]+")) {
+                    String[] temp = PinyinHelper.toHanyuPinyinStringArray(
+                        c, format);
+                    output.append(temp[0]);
+                } else
+                    output.append(Character.toString(c));
+            }
+        } catch (BadHanyuPinyinOutputFormatCombination e) {
+            e.printStackTrace();
+        }
+    } else {
+        return "*";
+    }
+    return output.toString();
+}
+```
+

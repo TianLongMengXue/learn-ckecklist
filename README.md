@@ -1,3 +1,7 @@
+# 语言切换(Language Switch)
+
+<center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/main/README.md">简体中文</a> |  <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/main/README.en.md">English</a></center>
+
 # 个人学习清单
 
 ## 基本说明

@@ -179,7 +179,7 @@ MVVM（Model View ViewModel，模式-视图-视图模型），其核心是 ViewM
 
 ![1679621987757](images/1679621987757.png)
 
-但是 `v-text` 指令和`{{text}}` 插值表达式是有区别的，`v-text`指令会覆写整个标签内部的内容，而`{{text}}`插值表达式仅仅只是使用数据替换整哥插值表达式。
+但是 `v-text` 指令和`{{text}}` 插值表达式是有区别的，`v-text`指令会覆写整个标签内部的内容，而`{{text}}`插值表达式仅仅只是使用数据替换整个插值表达式。
 
 ```html
 <!DOCTYPE html>
@@ -269,7 +269,7 @@ MVVM（Model View ViewModel，模式-视图-视图模型），其核心是 ViewM
 
 ## 6、vuejs基本指令v-bind
 
-### ①`v-bind`的基本用法
+①`v-bind`的基本用法
 
 ```html
 <!DOCTYPE html>
@@ -321,7 +321,7 @@ MVVM（Model View ViewModel，模式-视图-视图模型），其核心是 ViewM
 
 ### ②`v-bind`为属性绑定数组和对象
 
-使用`v-bind`绑定元素属性`class`时，其内容可以是数组或者对象。
+使用`v-bind`绑定元素属性`class`时，其内容可以是**数组或者对象**。
 
 ```html
 <!DOCTYPE html>

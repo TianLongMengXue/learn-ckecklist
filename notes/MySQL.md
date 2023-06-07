@@ -130,6 +130,104 @@
 
 ![1680511747496](images/1680511747496.png)
 
+## 4、无管理员权限安装MySQL
+
+（1）下载ZIP格式的安装包
+
+在 MySQL 官网下载 [ZIP 格式](https://downloads.mysql.com/archives/community/)的存档文件，下载 ZIP Archive 。
+
+![1686123390800](images/1686123390800.png)
+
+（2）将ZIP解压缩至指定目录
+
+**由于没有当前用户管理员权限，因此将目录 C:\Users\JING\AppData\Local\Programs 作为程序的安装目录使用。**
+
+（3）创建文件 **my.ini** ，并配置相关配置。
+
+在安装目录 **C:\Users\JING\AppData\Local\Programs\mysql5.7.41** 新建文件 **my.ini** 并在文件中添加如下内容。
+
+```text
+[client]
+port=3306
+default-character-set=utf8
+[mysqld]
+port=3306
+character_set_server=utf8
+# install directory
+basedir=C:/Users/JING/AppData/Local/Programs/mysql5.7.41
+# data directory
+datadir=C:/Users/JING/Documents/MySQL/Data
+# skip password login
+# skip-grant-tables
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+[WinMySQLAdmin]
+C:/Users/JING/AppData/Local/Programs/mysql5.7.41/bin/mysqld.exe
+```
+
+（4）安装 MySQL
+
+在安装目录 **C:\Users\JING\AppData\Local\Programs\mysql5.7.41** 下按住 **shift + 鼠标右键** 打开 Powershell ，输入如下指令。
+
+```powershell
+mysqld --initialize
+```
+
+```powershell
+mysqld --console
+```
+
+**注意：由于没有系统管理员权限，所以每一次启动mysql都需要执行一次** `mysqld --console` 命令才可以。
+
+（5）修改root用户的登陆密码
+
+在安装目录 **C:\Users\JING\AppData\Local\Programs\mysql5.7.41** 下按住 **shift + 鼠标右键** 打开 Powershell ，输入如下指令。
+
+```powershell
+mysqld --skip-grant-tables
+```
+
+![1686124569885](images/1686124569885.png)
+
+再在安装目录 **C:\Users\JING\AppData\Local\Programs\mysql5.7.41** 下按住 **shift + 鼠标右键** 打开 CMD ，输入如下指令。（**之前打开的 Powershell 必须保持打开状态，然后再开启一个命令窗口。**）
+
+```shell
+mysql
+```
+
+![1686124180559](images/1686124180559.png)
+
+```shell
+update mysql.user set authentication_string=password("root") where user="root";
+```
+
+![1686124407704](images/1686124407704.png)
+
+```shell
+flush privileges;
+```
+
+![1686124532697](images/1686124532697.png)
+
+**此时mysql的root用户的登陆密码就修改为root了。**
+
+（6）登录mysql
+
+**将之前开始的powershell和shell窗口都关闭。**
+
+在安装目录 **C:\Users\JING\AppData\Local\Programs\mysql5.7.41** 下按住 **shift + 鼠标右键** 打开 Powershell ，输入如下指令。
+
+```powershell
+mysqld --console
+```
+
+再在安装目录 **C:\Users\JING\AppData\Local\Programs\mysql5.7.41** 下按住 **shift + 鼠标右键** 打开 Powershell ，输入如下指令。
+
+```powershell
+mysql -u root -p
+```
+
+按下回车键之后，输入密码 `root` 。
+
 # mysql-notifier安装说明
 
 ## 1、下载mysql-notifier

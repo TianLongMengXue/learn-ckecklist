@@ -8,10 +8,17 @@
 
 ## 分支目录及文件基本说明
 
-### 笔记文件目录
+### notes”目录笔记内容目录。
 
--   **notes**目录为 **java** 分支的笔记内容目录。
-    -   **images** 目录为 **markdown** 笔记中使用的图片文件
-    -   **Intellij-IDEA.md** 文件中记录了 **java** 语言集成IDE **Intellij IDEA** 的安装过程、创建 **java** 工程、常用快捷键等。
-    -   **springboot.md** 文件记录了 **java** 框架 **springboot** 创建 **java web** 后端工程、**springboot** 基本说明、使用 **springboot** 进行 **java web** 开发涉及依赖和软件的使用等。 
+“Intellij-IDEA.md”文件中记录了 java 语言集成 IDE Intellij IDEA的安装过程、创建 java 工程、常用快捷键等。
+
+“springboot.md” 文件记录了  java 框架  spring boot 创建 java web 后端工程、 spring boot 基本说明、使用 spring boot 进行  java web 开发涉及依赖和软件的使用等。
+
+“JavaSE.md”文件记录 Java 语言基本语法的相关说明和使用示例。
+
+“MySQL.md”文件记录的数据库 MySQL 的安装过程、常用命令，以及 GUI 工具（Navicat）的安装、激活、个性化设置。
+
+### “debug” 目录为解决“踩坑”（问题 ERROR 和 WARN）目录。
+
+“debug.md”文件记录 ERROR 和 WARN 出现时情况，以及如何在这种情况出现时，解决这个 ERROR 和 WARN 。
 

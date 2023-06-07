@@ -1,6 +1,8 @@
-# 个人学习清单c分支
+# 语言切换（Language Switch)
 
- [![Security  Status](./c-brancg.svg)](https://www.murphysec.com/p/TianLongMengXue/std9899)
+<center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/c/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/c/README.en.md">English</a></center>
+
+# 个人学习清单c分支
 
 ## 基本说明
 

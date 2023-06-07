@@ -1,3 +1,7 @@
+# 语言切换（Language Switch）
+
+<center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/h5c3j6/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/h5c3j6/README.en.md">English</a></center>
+
 # 个人学习清单h5c3j6分支
 
 ## 基本说明

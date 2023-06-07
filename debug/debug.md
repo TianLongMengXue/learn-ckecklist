@@ -380,3 +380,18 @@ private UserService userService;
 （3）指定 type 属性：通过 byType 方式匹配，若是 IOC 容器中没有与之匹配的类，或者匹配到多个相同的类，那么注入失败、报错；
 
 （4）同时指定 name 属性和 type 属性：在 IOC 容器中，byName 和 byType 必须同时匹配，否则注入失败、报错。
+
+# Tika
+
+## ClassNotFoundException
+
+![1684976911099](images/1684976911099.png)
+
+```xml
+<dependency>
+    <groupId>org.apache.tika</groupId>
+    <artifactId>tika-core</artifactId>
+    <version>2.4.1</version><!-- 将使用的版本号降低,不要使用过新的版本 -->
+</dependency>
+```
+

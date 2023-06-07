@@ -1563,6 +1563,8 @@ spring.web.resources.static-locations=/upload/
 
 # springboot拦截器
 
+## 1、拦截器的构成与作用
+
 拦截器在 web 系统中非常常见，对于某些全局统一的操作，可以把它们提取到拦截器中实现。拦截器有如下几种使用场景：
 
 （1）权限检查：如登录检查，进入处理程序检测是否登录，若果没有，则直接返回登录页面；
@@ -1575,17 +1577,30 @@ spring.web.resources.static-locations=/upload/
 
 ![1679321600659](images/1679321600659.png)
 
+## 2、配置拦截器
+
 ```java
 public class LoginInterceptor implements HandlerInterceptor {
     /**
      * 在HTTP请求交付controller处理之前调用拦截器
      */
+    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         if(条件){
             return true;
         } else {
             return false;
         }
+    }
+    
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 }
 ```
@@ -1598,13 +1613,19 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 （3）注册一个拦截器，但是没有使用`addPathPattern`方法，则默认该拦截器会拦截所有地址；
 
-（4）注册一个拦截器，但是没有使用`excludePathPattern`方法，则默认该拦截器会拦截所有地址。
+（4）注册一个拦截器，但是没有使用`excludePathPattern`方法，则默认该拦截器会拦截所有地址；
+
+（5）注册一个拦截器，但是既没有使用`addPathPattern`方法，也没有使用`excludePathPattern`方法，则默认该拦截器会拦截所有地址。
 
 ```java
 @Configuration
 public class WebInterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/")
+        // 拦截所有的请求 /**
+        // 使用 / 只能拦截对于 localhost:8080/ 的请求
+        // 使用 /* 只能拦截对于 localhost:8080/get 这样的一级请求,对于 localhost:8080/get/check 的二级请求不能拦截
+        // 使用 /get/* 只能拦截对于 localhost:8080/get/check 这样的位于一级请求get/下的二级请求,对于 localhost:8080/get/check/out 的三级请求不能拦截
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**");
     }
 }
 ```
@@ -1612,6 +1633,137 @@ public class WebInterceptorConfig implements WebMvcConfigurer {
 ![1679323125252](images/1679323125252.png)
 
 ![1679323143079](images/1679323143079.png)
+
+## 3、拦截器校验数据并将结果共享给controlloer
+
+（1）使用 `request.setAttribute` 和 `request.getAttribute` 共享数据。
+
+```java
+@Override
+public boolean preHandle(
+    HttpServletRequest request,
+    HttpServletResponse response,
+    Object handler) throws Exception {
+    request.setAttribute("request", "request");
+    return true;
+}
+```
+
+```java
+@RestController
+@CrossOrigin
+@RequestMapping("/authorized")
+public class AuthorizedController {
+    @PostMapping("/get")
+    public Map<String,Object> authorized (HttpServletRequest request, @RequestBody Map<String, Object> ret) {
+        System.out.println(ret.get("qing"));
+        System.out.println("request.getAttribute: "+request.getAttribute("request"));
+        Map<String,Object> result = new HashMap<>();
+        result.put("code", 200);
+        result.put("authorized", true);
+        result.put("qing", ret.get("qing"));
+        result.put("request.getAttribute: ", request.getAttribute("request"));
+        return result;
+    }
+}
+```
+
+![1685672875173](images/1685672875173.png)
+
+（2）使用 `request.getServletContext().setAttribute` 和 `request.getServletContext().getAttribute` 共享数据。
+
+```java
+@Override
+public boolean preHandle(
+    HttpServletRequest request,
+    HttpServletResponse response,
+    Object handler) throws Exception {
+    request.getServletContext().setAttribute("getServletContext", "getServletContext");
+    return true;
+}
+```
+
+```java
+@RestController
+@CrossOrigin
+@RequestMapping("/authorized")
+public class AuthorizedController {
+    @PostMapping("/get")
+    public Map<String,Object> authorized (HttpServletRequest request, @RequestBody Map<String, Object> ret) {
+        System.out.println(ret.get("qing"));
+        System.out.println("request.getServletContext: "+request.getServletContext().getAttribute("getServletContext"));
+        Map<String,Object> result = new HashMap<>();
+        result.put("code", 200);
+        result.put("authorized", true);
+        result.put("qing", ret.get("qing"));
+        result.put("request.getServletContext", request.getServletContext().getAttribute("getServletContext"));
+        return result;
+    }
+}
+```
+
+![1685673420407](images/1685673420407.png)
+
+（3）使用 ThreadLocal 共享数据。
+
+```java
+public class AuthorizedThread {
+    public static final ThreadLocal<String> authorizedThread = new ThreadLocal<>();
+
+    public static void setAuthorizedThread(String userid) {
+        authorizedThread.set(userid);
+    }
+
+    public static String getAuthorizedThread() {
+        return authorizedThread.get();
+    }
+
+    public static void removeAuthorizedThread() {
+        authorizedThread.remove();
+    }
+}
+```
+
+```java
+@Override
+public boolean preHandle(
+    HttpServletRequest request,
+    HttpServletResponse response,
+    Object handler) throws Exception {
+    AuthorizedThread.setAuthorizedThread("AuthorizedThread");
+    return true;
+}
+@Override
+public void afterCompletion(
+    HttpServletRequest request, 
+    HttpServletResponse response, 
+    Object handler, 
+    Exception ex) throws Exception {
+    AuthorizedThread.removeAuthorizedThread();
+    HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+}
+```
+
+```java
+@RestController
+@CrossOrigin
+@RequestMapping("/authorized")
+public class AuthorizedController {
+    @PostMapping("/get")
+    public Map<String,Object> authorized (HttpServletRequest request, @RequestBody Map<String, Object> ret) {
+        System.out.println(ret.get("qing"));
+        System.out.println("AuthorizedInterceptor ThreadLocal: "+ AuthorizedThread.getAuthorizedThread());
+        Map<String,Object> result = new HashMap<>();
+        result.put("code", 200);
+        result.put("authorized", true);
+        result.put("qing", ret.get("qing"));
+        result.put("AuthorizedInterceptor ThreadLocal", AuthorizedThread.getAuthorizedThread());
+        return result;
+    }
+}
+```
+
+![1685673674175](images/1685673674175.png)
 
 # RESTful API
 
@@ -1767,6 +1919,8 @@ spring.mvc.pathmatch.matching-strategy=ant_path_matcher
 ![1679365680128](images/1679365680128.png)
 
 ## 6、为Swagger添加接口注释
+
+（1）` @ApiOperation("str") `
 
 在controller的接口上添加注解`@ApiOperation("str")`，那么在Swagger的可视化界面上就可以看到对应的接口上被添加的说明。
 

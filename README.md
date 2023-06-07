@@ -1,3 +1,7 @@
+# 语言切换（Language Switch）
+
+<center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/java/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/java/README.en.md">English</a></center>
+
 # 个人学习清单java分支
 
 ## 基本说明
@@ -8,7 +12,7 @@
 
 ## 分支目录及文件基本说明
 
-### notes”目录笔记内容目录。
+###  “notes”目录笔记内容目录。
 
 “Intellij-IDEA.md”文件中记录了 java 语言集成 IDE Intellij IDEA的安装过程、创建 java 工程、常用快捷键等。
 

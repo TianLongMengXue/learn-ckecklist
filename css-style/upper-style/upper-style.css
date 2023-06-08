@@ -53,7 +53,6 @@ content {
 	border: 1px solid rgba(255, 250, 250, .8);
 	border-radius: 40px;
 	backdrop-filter: blur(2px);
-	/* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
 }
 
 /*段落*/
@@ -163,9 +162,6 @@ content {
 	margin-bottom: 5px;
 	line-height: 26px;
 	text-align: left;
-	/* color: rgb(1, 1, 1); */
-	/* 只要是纯黑色微信编辑器就会把color这个属性吞掉。。。*/
-	/* font-weight: 500; */
 }
 
 /* 引用部分,使用 > 指向的内容 */
@@ -177,8 +173,6 @@ content {
 	border-left: 3px solid rgb(239, 112, 96);
 	color: #6a737d;
 	padding: 0px 10px 0px 20px;
-	/*margin-bottom: 20px;
-    margin-top: 20px;*/
 	background: #fff9f9;
 }
 
@@ -255,7 +249,6 @@ content {
 }
 
 #write table tr th {
-	/* font-weight: bold; */
 	background-color: #f0f0f0;
 }
 
@@ -300,7 +293,6 @@ content {
 	padding: 3px 6px;
 	border-radius: 4px;
 	margin: 0 2px;
-	/* color: rgb(239, 112, 96); */
 	color: #06B;
 	background-color: rgba(27, 31, 35, .05);
 	font-family: var(--font-family-code);
@@ -312,7 +304,7 @@ pre {
 	--select-text-bg-color: #ebe1f5;
 }
 
-/* border and bg 代码段 */
+/* 边框和背景 代码段 */
 .md-fences {
 	border: 1px solid #eee;
 	border-radius: 5px;
@@ -371,7 +363,6 @@ pre {
 }
 
 .cm-s-inner span.cm-comment {
-	/*color: #9daab6;*/
 	color: #008000;
 }
 
@@ -379,7 +370,7 @@ pre {
 	color: #0451a5;
 }
 
-/* language tip */
+/* 代码段的代码语言框 */
 #write .code-tooltip {
 	border: 1px solid #eee;
 }
@@ -393,7 +384,7 @@ pre {
 	color: inherit;
 }
 
-/* task list */
+/* 任务栏列表 */
 #write .md-task-list-item>input {
 	-webkit-appearance: initial;
 	display: block;
@@ -454,7 +445,6 @@ pre {
 	opacity: 0.6;
 }
 
-/* sidebar and outline */
 /* 左侧的标题大纲,或者文件树区域 */
 #typora-sidebar {
 	background: transparent;

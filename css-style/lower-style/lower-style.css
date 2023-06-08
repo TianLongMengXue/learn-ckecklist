@@ -1,28 +1,3 @@
-/* PDF打印：A3 */
-@media print {
-  #write {
-    max-width: 100%;
-  }
-  @page {
-    size: A4; /* A3 */
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-@media print {
-  html {
-    font-size: 0.9rem;
-  }
-
-  table,
-  pre {
-    page-break-inside: avoid;
-  }
-
-  pre {
-    word-wrap: break-word;
-  }
-}
 /* 全局属性 */
 #write {
   max-width: 1080px;
@@ -130,7 +105,7 @@
   margin-bottom: 5px;
   line-height: 26px;
   text-align: left;
-  color: rgb(1,1,1); /* 只要是纯黑色微信编辑器就会把color这个属性吞掉。。。*/
+  color: rgb(1,1,1);
   font-weight: 500;
 }
 
@@ -143,8 +118,6 @@
   border-left: 3px solid rgb(239, 112, 96);
   color: #6a737d;
   padding: 0px 10px 0px 20px;
-  /*margin-bottom: 20px;
-  margin-top: 20px;*/
   background: #fff9f9;
 }
 #write blockquote p {
@@ -185,7 +158,6 @@
 }
 
 #write span img {
-  /*display: inline-block;*/
   border-right: 0px;
   border-left: 0px;
 }
@@ -252,7 +224,7 @@ pre {
   --select-text-bg-color: #ebe1f5;
 }
 
-/* border and bg 代码段 */
+/* 边框和背景 代码段 */
 .md-fences {
   border: 1px solid #eee;
   border-radius: 5px;
@@ -310,14 +282,12 @@ pre {
 }
 
 .cm-s-inner span.cm-comment {
-  /*color: #9daab6;*/
   color: #008000;
 }
 .cm-s-inner span.cm-builtin {
   color: #0451a5;
 }
 
-/* language tip */
 #write .code-tooltip {
   border: 1px solid #eee;
 }
@@ -331,7 +301,6 @@ pre {
   color: inherit;
 }
 
-/* task list */
 #write .md-task-list-item > input {
   -webkit-appearance: initial;
   display: block;
@@ -392,7 +361,6 @@ pre {
   opacity: 0.6;
 }
 
-/* sidebar and outline */
 .pin-outline .outline-active {
   color: #79589f;
 }

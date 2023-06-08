@@ -1,7 +1,6 @@
 # Language Switch
 
 <center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/c/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/c/README.en.md">English</a></center>
-
 # C Branch
 
 ## overview
@@ -11,11 +10,20 @@ This repository uses **MIT License**, and you can download and use it yourself i
 
 ## Branch directory and file description
 
-“notes”: C language notes organized by "c-note. md" in the directory.
+### Directory “notes”is a directory of note contents.
 
-“vidoe-learn-HaoBin”: Under the directory is [Teacher Hao Bin's C language course]( https://www.bilibili.com/video/BV1os411h77o ) Some examples in and some test code that came to mind while watching.
-“C-programming-Tan-HaoQiang”: The directory contains the example and exercise code from Teacher Tan Haoqiang's book "C Programming Fifth Edition ".
-“C-Primer-plus-version-six”: The directory contains examples and exercise codes from the sixth edition of C Primer Plus.
-“c-deep-analysis”: Under the directory is [C language deep analysis]( https://www.bilibili.com/video/BV1UZ4y1o7Nm ) Some examples in and some test code that came to mind while watching.
+File “c-note.md” records C language grammar notes.
 
-“debug” : The 'debug. md' in the directory summarizes various errors and warnings encountered during the learning process.
+### Books and videos of study of directories.
+
+Directory“vidoe-learn-HaoBin”: Under the directory is [Teacher Hao Bin's C language course]( https://www.bilibili.com/video/BV1os411h77o ) Some examples in and some test code that came to mind while watching.o;
+
+Directory“C-programming-Tan-HaoQiang”: The directory contains the example and exercise code from Teacher Tan Haoqiang's book "C Programming Fifth Edition ".
+
+Directory“C-Primer-plus-version-six”: The directory contains examples and exercise codes from the sixth edition of C Primer Plus.
+
+Directory“c-deep-analysis”: Under the directory is [C language deep analysis]( https://www.bilibili.com/video/BV1UZ4y1o7Nm ) Some examples in and some test code that came to mind while watching.
+
+### Directory “debug”is the directory for solving the "error and WARN" problems.
+
+File “debug. md” records the situation when ERROR and WARN occur, and how to resolve them when this situation occurs.

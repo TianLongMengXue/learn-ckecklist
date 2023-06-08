@@ -1,7 +1,6 @@
 # 语言切换（Language Switch)
 
 <center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/c/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/c/README.en.md">English</a></center>
-
 # 个人学习清单c分支
 
 ## 基本说明
@@ -12,9 +11,9 @@
 
 ## 分支目录及文件基本说明
 
-### 笔记文件目录
+### “notes”笔记文件目录
 
-"notes" : 目录下的 "c-note.md" 整理的C语言笔记。
+"c-note.md" 整理的C语言笔记。
 
 ### 相关学习书籍和视频目录
 
@@ -26,10 +25,10 @@
 
 "c-deep-analysis" : 目录下是 [C语言深度解析](https://www.bilibili.com/video/BV1UZ4y1o7Nm) 中的部分实例和自己观看时想到的一些测试代码。
 
-### 代码文件目录
+### “code”代码文件目录
 
-“code” : 目录下的 “code.md” 整理的各个学习视频例题和书籍上的例题(instance)以及课后习题(exercise)代码。
+“code.md” 整理的各个学习视频例题和书籍上的例题(instance)以及课后习题(exercise)代码。
 
-### 踩坑文件目录
+### “debug”“踩坑”文件目录
 
-“debug” : 目录下的 “debug.md” 汇总了学习过程中遇到的各种报错(ERROR)和警告(Warning)。
+“debug.md” 汇总了学习过程中遇到的各种报错(ERROR)和警告(Warning)。

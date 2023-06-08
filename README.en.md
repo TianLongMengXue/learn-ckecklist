@@ -1,7 +1,6 @@
 # Language Switch
 
 <center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/h5c3j6/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/h5c3j6/README.en.md">English</a></center>
-
 # H5C3J6 Banch
 
 ## overview
@@ -11,7 +10,7 @@ This warehouse uses **MIT License**, and you can download and use it yourself if
 
 ## Branch directory and file description
 
-Directory“notes”contains file“JetBrains-WebStorm.md”, and “vue.js”.
+### Directory “notes”is a directory of note contents.
 
 File“JetBrains-WebStorm.md” records the installation process of the front-end development integrated IDE JetBrains WebStorm.
 

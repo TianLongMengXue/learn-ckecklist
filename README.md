@@ -1,7 +1,6 @@
 # 语言切换（Language Switch）
 
 <center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/h5c3j6/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/h5c3j6/README.en.md">English</a></center>
-
 # 个人学习清单h5c3j6分支
 
 ## 基本说明
@@ -12,10 +11,9 @@
 
 ## 分支目录及文件基本说明
 
-### 笔记文件目录
+###  “notes”目录是学习笔记内容存放目录。
 
--   **notes**目录为 **h5c3j6** 分支的笔记内容目录。
-    -   **images** 目录为 **markdown** 笔记中使用的图片文件
-    -   **JetBrains-WebStorm** 文件中记录了前端开发集成IDE **JetBrains WebStorm** 的安装过程。
-    -   **vuejs.md** 文件记录了前端开发框架 **vuejs** 创建 **web** 前端工程、**vuejs** 基本说明、使用 **vuejs** 进行前端 **web** 开发涉及依赖和软件的使用等。 
+“JetBrains-WebStorm.md”文件中记录了前端开发集成IDE **JetBrains WebStorm** 的安装过程、个性化配置。
+
+“vuejs.md”文件记录了前端开发框架 Vue.js 创建 WEB 前端工程、Vue.js 基本语法、使用 Vue.js 进行前端 WEB 开发涉及依赖和软件的使用等。 
 

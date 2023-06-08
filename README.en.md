@@ -1,7 +1,6 @@
 # Language Switch
 
 <center><a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/java/README.md">简体中文</a> | <a href="https://github.com/TianLongMengXue/learn-ckecklist/blob/java/README.en.md">English</a></center>
-
 # Java Branch
 
 ## Overview

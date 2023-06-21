@@ -1266,6 +1266,170 @@ public class HelloController{
 
 ![1679309769092](images/1679309769092.png)
 
+## 7、controller的参数注解
+
+使用 controller 接收来自前端发送的数据时，通常会有无注解、@PathParam/@PathVariable、@RequestParam/@QueryParam、@RequestBody的形式。
+
+（1）无注解的形式
+
+在 controller 的方法中，直接表明参数类型和参数名称，不使用任何注解标识。这种情况下 **不能接收JSON格式的数据；即使前端不在请求中提供这些数据，controller 也不会报错。** 虽然 GET 和 POST 请求都可以使用，但是通常这种方式只用来接收前端发送的 GET 请求。
+
+```java
+@RestController
+public class HelloController{
+    @RequestMapping(value="/hello",method=RequestMethod.GET)
+    public String hello(String name,String age){
+        return "hello "+name+" "+age;
+    }
+}
+```
+
+（2）@PathParam/@PathVariable注解
+
+@PathParam 和 @PathVariable 注解它们两个作用相同，用来接收使用 URL 传递的数据。 但是这种会将数据展示在 URL 中的方式，通常只用来接收前端发送的 GET 请求。
+
+```java
+@RestController
+public class HelloController{
+    @RequestMapping(value="/hello/{name}/{age}",method=RequestMethod.GET)
+    public String hello(@PathVariable(value="name") String name,@PathParam(value="age") String age){
+        // @PathVariable(value="name") String name,@PathParam(value="age") String age 中的 value 属性也可以省略
+        // 即 @PathVariable("name") String name,@PathParam("age") String age
+        return "hello "+name+" "+age;
+    }
+}
+```
+
+（3）@RequestParam/@QueryParam注解
+
+@RequestParam 和 @QueryParam 注解它们两个的作用相同，用来接收前端发送的请求体中的数据。前端发送的 GET 和 POST 请求 controller 都可以接收；controller 方法中的参数可以是普通的数据类型，也可以是对象参数类型。**但是不能接收前端发送的 JSON 格式的数据。**
+
+常用的形式为 `@RequestParam("value")` 和 `@QueryParam("value")` ，其中 `value` 是前端请求体中数据的标识符，`value` 和 controller 中参数的标识符可以不相同，但是一定要和前端发送的请求体中数据的标识符相同，否则数据不能进行映射。
+
+```java
+@RestController
+public class HelloController{
+    @RequestMapping(value="/hello",method=RequestMethod.POST)
+    public String hello(
+        @RequestParam("name") String name,
+        @QueryParam("age") String age){
+        return "hello "+name+" "+age;
+    }
+}
+```
+
+`@RequestParam` 注解支持四个参数：
+
+- `value` : 与前端请求体中数据的标识符相同；
+- `defaultValue` : 前端发送的请求体中，若是没有这个参数或者请求体中这个参数为空，那么就会将指定的默认值赋值给 controller 中这个参数。（`defaultValue` 的默认值为 `“”` ）
+- `required` : 前端发送的请求体中是否必须包含该项参数。（`required`的默认值为 `true` ）
+- `name` : 该项参数与 `value` 参数作用相同，`value` 是 `name` 的一个别名。
+
+但是注解 `@QueryParam` 只有一个 `value` 参数。
+
+```java
+@RestController
+public class HelloController{
+    @RequestMapping(value="/hello",method=RequestMethod.POST)
+    public String hello(
+        @RequestParam(value="name", defaultValue="name", required=false) String name,
+        @QueryParam(vaule="age") String age){
+        return "hello "+name+" "+age;
+    }
+}
+```
+
+（4）@RequestBody注解
+
+@RequestBody注解，**只能接收前端发送的 JSON 格式的数据，只能接收前端发送的 POST 请求**。
+
+当 controller 使用 Map 接收时，Map 中的数据与前端请求体中 JSON 格式数据完全相同，前端中使用的数据标识符是什么，那么在 controller 中就使用相同数据标识符从 Map 中获取。
+
+```java
+@RestController
+public class HelloController{
+    @RequestMapping(value="/hello",method=RequestMethod.POST)
+    public String hello(
+        @RequestBody Map<String,Object> requestParam){
+        String name = (String) requestParam.get("name");
+        String age = (Integer) requestParam.get("age");
+        return "hello "+name+" "+age;
+    }
+}
+```
+
+当 controller 使用实体类对象接收时，实体类中各个成员变量的标识符要和前端请求中发送的 JSON 格式数据中的数据项的标识符一一对应，否则不能映射，数据无法赋值。
+
+```java
+@RestController
+public class HelloController{
+    @RequestMapping(value="/hello",method=RequestMethod.POST)
+    public String hello(
+        @RequestBody Userinfo userinfo){
+        System.out.println(userinfo.toString());
+        return userinfo.toString();
+    }
+}
+```
+
+（5）@RequestHeader注解
+
+`@RequestHeader`注解获取前端发送请求的请求头中包含的数据。
+
+```java
+@RestController
+@CrossOrigin
+@RequestMapping("/param")
+public class ParamController {
+    @PostMapping("/header")
+    public Map<String,Object> testHeaderParam (
+        // 这里用来接收请求头中数据的参数标识符一定要相同,不然无法映射成功匹配数据
+        @RequestHeader String requestParam,
+        HttpServletRequest request
+    ) {
+        System.out.println(requestParam);
+        System.out.println(request.toString());
+        Map<String,Object> result = new HashMap<>();
+        result.put("requestParam", requestParam);
+        result.put("request", request.toString());
+        return result;
+    }
+}
+```
+
+![1687134599323](images/1687134599323.png)
+
+![1687135018323](images/1687135018323.png)
+
+（6）@CookieValue注解
+
+`@CookieValue`注解用来获取前端发送的请求中来自 cookie 中的数据。
+
+```java
+@RestController
+@CrossOrigin
+@RequestMapping("/param")
+public class ParamController {
+    @PostMapping("/cookie")
+    public Map<String,Object> testCookieParam (
+        // 这里参数的标识符一定要和 cookie 中数据的标识符完全相同,不然无法映射成功匹配数据
+        @CookieValue String cookieParam,
+        HttpServletRequest request
+    ) {
+        System.out.println(cookieParam);
+        System.out.println(request.toString());
+        Map<String,Object> result = new HashMap<>();
+        result.put("cookieParam", cookieParam);
+        result.put("request", request.toString());
+        return result;
+    }
+}
+```
+
+![1687134408881](images/1687134408881.png)
+
+![1687135218478](images/1687135218478.png)
+
 ## 7、静态资源
 
 （1）在 springboot 中定义了 默认的静态资源目录，项目开发中一般会将静态资源放置在这些静态资源目录下。
@@ -1778,7 +1942,7 @@ RESTful 是目前流行的互联网软件服务架构设计风格，RESTful 不�
 
 ```java
 // 原始的http请求API的controller
-@RestMapping("/api/order")
+@RequestMapping("/api/order")
 public String order(String id, String status){
     return id+" "+status;
 }

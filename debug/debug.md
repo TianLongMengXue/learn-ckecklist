@@ -395,3 +395,209 @@ private UserService userService;
 </dependency>
 ```
 
+# spring boot
+
+## 拦截器注入Service为null
+
+```java
+public class LoginInterceptor implements HandlerInterceptor {
+    private final Logger log = LoggerFactory.getLogger("Class:AuthorizedInterceptor");
+    @Resource(name = "userInfoService")
+    private UserInfoService userInfoService;
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) {
+        log.debug("preHandle: @Resource(name = \"userInfoService\") :" + userInfoService);
+        return true;
+    }
+}
+```
+
+```java
+@Configuration
+public class WebInterceptorConfig implements WebMvcConfigurer {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+            .addPathPatterns("/**")
+            .excludePathPatterns("/")
+            .excludePathPatterns("/login/check");
+        WebMvcConfigurer.super.addInterceptors(registry);
+    }
+}
+```
+
+![1687317794857](images/1687317794857.png)
+
+在控制台显示的日志中，注入的 `UserInfoService` 为 `null` ，并没有被注入成功。
+
+一方面，拦截器的加载是在 springcontext 创建之前完成的，此时在拦截器中注入的就是 null ；另一方面，将拦截器注册到 `InterceptorRegistry` 中的时候，通过 `new` 创建出来的实例是没有交给 spring 统一管理的，因此 spring 是没有办法将实例注入的。
+
+因此，在实现 `WebMvcConfigurer` 的类中，将拦截器类添加进去作为一个 `Bean` 。
+
+```java
+@Configuration
+public class WebInterceptorConfig implements WebMvcConfigurer {
+    @Bean
+    public LoginInterceptor initLoginInterceptor () {
+        return new LoginInterceptor();
+    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(initLoginInterceptor()) // 这里就不再是 new 拦截器,而是使用 Bean
+            .addPathPatterns("/**")
+            .excludePathPatterns("/")
+            .excludePathPatterns("/login/check");
+        WebMvcConfigurer.super.addInterceptors(registry);
+    }
+}
+```
+
+![1687320603260](images/1687320603260.png)
+
+此时，在拦截器中注入的 `UserInfoService` 就不再为 `null` 。
+
+## 全局异常处理 Could not find acceptable representation
+
+![1687320705177](images/1687320705177.png)
+
+1、可能原因一
+
+后端发送的相应所使用的正文格式，与前端可以接收的正文格式不匹配。此时，要么在前端可以接收的正文格式中添加该种正文格式，要么在后端将相应的正文格式修改为前端可以接收的正文格式。
+
+如，在前端的请求头中添加 `Accept` 字段，将后端发送的正文格式添加进去，或者直接使用 `*/*` 作为字段值，允许后端发送任意格式的正文格式。
+
+![1687330116097](images/1687330116097.png)
+
+2、可能原因二
+
+后端封装的相应格式无法通过 `@RestController` 注解被 spring boot 转换为 JSON 格式。
+
+```java
+/**
+ * 数据响应对象
+ * {
+ * "code":        Integer   状态码
+ * "info":         Boolean  指令执行成功否
+ * "message": String      返回信息
+ * "data":        Object {
+ *                          //返回数据
+ *                     }
+ * }
+ */
+public class ResponseData {
+    /*
+     * 200: success
+     * 500: error,检索的数据不存在/已存在,后端无法封装数据
+     * */
+    private Integer code;
+    /*
+     * true: 指令执行成功
+     * false: 指令执行失败
+     */
+    private Boolean info;
+    /*
+     * code 和 info 对应的属性值的文字说明
+     * */
+    private String message;
+    /*
+     * 返回给前端的数据
+     * */
+    private Object data;
+
+    public ResponseData(Integer code, Boolean info, String message, Object data) {
+        this.code = code;
+        this.info = info;
+        this.message = message;
+        this.data = data;
+    }
+
+    /**
+     * 指令执行成功
+     * code 200
+     * info true
+     *
+     * @param message    code 和 info 对应的属性值的文字说明
+     * @param resultData 返回给前端的数据
+     * @return ResponseData 返回给前端的已经封装好了的数据
+     */
+    public static ResponseData SUCCESS(String message, Object resultData) {
+        return new ResponseData(200, true, message, resultData);
+    }
+
+    /**
+     * 抛出异常,前端提供的数据无法通过校验
+     * code 500
+     * info error
+     *
+     * @param message data null
+     * @return ResponseData
+     */
+    public static ResponseData ERROR(String message) {
+        return new ResponseData(500, false, message, null);
+    }
+}
+```
+
+如上代码中，将真正返回给前端的数据使用 `Object` 类型接收再封装成实体类，最后返回给前端。但是，`Object` 类型在使用的时候需要涉及数据类型方面的转化，此时 spring boot 就不能将该实体类转换为 JSON 格式，从而报错。
+
+对于这种情况，需要将 `Object` 类型更换为泛型 `T` 。
+
+```java
+public class ResponseRes<T> {
+    /*
+     * 200: success
+     * 500: error,检索的数据不存在/已存在,后端无法封装数据
+     * */
+    private Integer code;
+    /*
+     * true: 指令执行成功
+     * false: 指令执行失败
+     */
+    private Boolean info;
+    /*
+     * code 和 info 对应的属性值的文字说明
+     * */
+    private String message;
+    /*
+     * 返回给前端的数据
+     * */
+    private T data;
+
+    private ResponseRes(Integer code, Boolean info, String message, T data) {
+        this.code = code;
+        this.info = info;
+        this.message = message;
+        this.data = data;
+    }
+
+    /**
+     * 指令执行成功
+     * code 200
+     * info true
+     *
+     * @param message    code 和 info 对应的属性值的文字说明
+     * @param resultData 返回给前端的数据
+     * @return ResponseData 返回给前端的已经封装好了的数据
+     */
+    public static <T> ResponseRes SUCCESS(String message, T resultData) {
+        return new ResponseRes(200, true, message, resultData);
+    }
+
+    /**
+     * 抛出异常,前端提供的数据无法通过校验
+     * code 500
+     * info error
+     *
+     * @param message data null
+     * @return ResponseData
+     */
+    public static <T> ResponseRes ERROR(String message) {
+        return new ResponseRes(500, false, message, null);
+    }
+}
+```
+
+![1687331255777](images/1687331255777.png)
+

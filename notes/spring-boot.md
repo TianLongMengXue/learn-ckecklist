@@ -1637,6 +1637,14 @@ private Resource getIndexHtml(Resource location) {
 
 ![1679243328651](images/1679243328651.png)
 
+# service层
+
+## 1、Service调用Service
+
+MVC 基本原则：controller 、service 、dao 三层，同层之间不能相互调用，dao 层只能由对应的 service 调用封装 CRUD。
+
+但是，当 service 层出现业务逻辑跨表的时候，就必然会需要 service 层之间的相同调用，**但是必须要遵循单向调用原则：**即 service A 调用 service B 那么就不能再有 service B 调用 service A 的情况出现，若是 service A 与 service B 不可避免的需要相互调用，那么就只能再封装一个 service C 将业务集中，然后 sercice A 和 service B 分别去调用 service C 构成单向调用。
+
 # springboot文件上传
 
 （1）文件上传的原理分析

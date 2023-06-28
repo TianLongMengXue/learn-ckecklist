@@ -27,7 +27,11 @@
 
 ### “code”代码文件目录
 
-“code.md” 整理的各个学习视频例题和书籍上的例题(instance)以及课后习题(exercise)代码。
+“vidoe-learn-HaoBin.md” [郝斌老师的C语言课程](https://www.bilibili.com/video/BV1os411h77o) 中部分实例代码和测试代码，以及程序分析。
+
+“c-programming-TanHaoQiang.md” 《C程序设计第五版》谭浩强书籍中例题和课后练习题的代码，以及程序分析。
+
+“c-primer-plus-version-six.md” 《C Primer Plus》第六版中例题和课后练习题的代码，以及程序分析。
 
 ### “debug”“踩坑”文件目录
 
